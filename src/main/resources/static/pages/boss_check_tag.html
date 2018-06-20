@@ -97,8 +97,7 @@
         intxt.style.backgroundColor = "#e3e3e3";
     }
     //点击add按钮添加标签
-    addBtn.onclick = function () {
-        if(intxt.value != ""){
+    function addTag(tag) {
             var newdiv = crele("div");
             var newem = crele("em");
 
@@ -108,15 +107,8 @@
             }else{
                 tagcon.insertBefore(newdiv,divs[0])
             }
-            adson(newdiv,newem,newa,"tag","tagtxt","closetag",intxt.value,"×")
-            intxt.value = "";
-        }else{
-            alert("你还没有输入呢！");
-        }
+            adson(newdiv,newem,newa,"tag","tagtxt","closetag",tag,"");
         //console.log(links.length);
-        newa.onclick = function () {
-            this.parentNode.parentNode.removeChild(this.parentNode);
-        }
     }
 </script>
 <script src="http://www.jq22.com/jquery/jquery-1.10.2.js"></script>
