@@ -407,6 +407,13 @@ public class WorkerController {
 
     }
 
+    @RequestMapping(value = "/saveDrawXY/{missionName}/{order}/{xy}", method = POST)
+    @ResponseBody
+    public boolean xy(@PathVariable("username") String username, @PathVariable("missionName") String missionName,
+                     @PathVariable("order") String order, @PathVariable("xy") String xy){
+
+        return true;
+    }
 
 
 
