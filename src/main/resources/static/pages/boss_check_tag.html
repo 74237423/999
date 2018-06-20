@@ -50,7 +50,7 @@
                 </ul>
             </li>
             <li>
-                <a href="" class="afinve"><em class="icon_1"></em><span>返回</span></a>
+                <a href="" class="afinve" onclick="back()"><em class="icon_1"></em><span>返回</span></a>
             </li>
         </ul>
     </div>
@@ -137,6 +137,9 @@
 
         });
     });
+    function back() {
+        window.history.go(-1);
+    }
 </script>
 
 </body>
