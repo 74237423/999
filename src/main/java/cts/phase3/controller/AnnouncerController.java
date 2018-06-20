@@ -15,6 +15,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 
 import javax.annotation.Resource;
+import javax.persistence.criteria.CriteriaBuilder;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.Base64;
@@ -56,6 +57,9 @@ public class AnnouncerController {
 
     @Resource
     private WeeklyLoginService weeklyLoginService;
+
+    @Resource
+    private AcceptService acceptService;
 
     @RequestMapping(value = "/release", method = POST)
     @ResponseBody
@@ -168,14 +172,81 @@ public class AnnouncerController {
         return announcerService.updateById(announcer);
     }
 
+    @RequestMapping(value = "/viewAllAccepts", method = GET)
+    @ResponseBody
+    public String viewAllAccepts(@PathVariable("username") String username){
+        Announcer announcer = announcerService.getAnnouncerByName(username);
+        List<Release> releases = releaseService.getAllReleaseByAnnouncer(username);
+        List<Mission> missions = releaseService.getMissionByAnnouncerName(username);
+        List<Mission> acceptMissions = new ArrayList<>();
+        List<Accept> accepts = new ArrayList<>();
+        for(int i = 0; i < missions.size(); i++){
+            Mission mission = missions.get(i);
+            List<Accept> acceptByMissionName = acceptService.getAcceptByMissionName(mission.getName());
+            for(int j = 0; j < acceptByMissionName.size(); j++){
+                accepts.add(acceptByMissionName.get(j));
+                acceptMissions.add(mission);
+            }
+        }
+        String ret = "";
+        for(int i = 0; i < accepts.size(); i++){
+            Accept accept = accepts.get(i);
+            Mission mission = acceptMissions.get(i);
+            ret += "{\"announcerName\":\"" + announcer.getUsername() + "\", \"workerName\":\"" + accept.getWorkerName()
+                    + "\", \"points\":\"" + mission.getPoints() + "\", \"start\":\"" + accept.getStart() + "\", \"end\":\""
+                    + accept.getEnd() + "\", \"way\":\"" + mission.getWay() + "\", \"type\":\"" + mission.getType()
+                    + "\", \"description\":\"" + mission.getDescription() + "\", \"difficulty\":\"" + mission.getDifficultyClass()
+                    + "\", \"isFinished\":\"" + accept.getIsFinished() + "\"}";
+            if(i != accepts.size() - 1)
+                ret += "_";
+        }
+        return ret;
+    }
+
+    @RequestMapping(value = "/viewAccept/{missionName}/{workerName}/draw", method = GET)
+    @ResponseBody
+    public String viewAccept(@PathVariable("username") String username, @PathVariable("missionName") String missionName,
+                             @PathVariable("workerName") String workerName){
+        Accept accept = acceptService.getAcceptByMissionNameAndWorkerName(missionName, workerName);
+        Mission mission = missionService.getMissionByName(accept.getMissionName());
+        int pics = missionPictureService.selectMissionPicturesByMission(mission.getName()).size();
+        String ret = "{\"announcerName\":\"" + username + "\", \"workerName\":\"" + accept.getWorkerName()
+                + "\", \"points\":\"" + mission.getPoints() + "\", \"start\":\"" + accept.getStart() + "\", \"end\":\""
+                + accept.getEnd() + "\", \"way\":\"" + mission.getWay() + "\", \"type\":\"" + mission.getType()
+                + "\", \"description\":\"" + mission.getDescription() + "\", \"difficulty\":\"" + mission.getDifficultyClass()
+                + "\", \"isFinished\":\"" + accept.getIsFinished() + "\", \"pics\":\"" + pics + "\"}";
+        return ret;
+    }
+
     /**
-     * 查看一个工人提交任务后的所有图片
-     * @param workername
+     * 查看一个工人提交任务后的图片
+     * @param
      * @return
      */
-    public List<WorkerPicture> examineAllPicture(String workername, String missionName) {
-        List<WorkerPicture> ret = this.workerPictureService.findByWorkerNameAndMissionName(workername, missionName);
-        return ret;
+    @ResponseBody
+    @RequestMapping(value = "/viewAcceptPictures/{missionName}/{workerName}/draw/{order}", method = GET)
+    public String viewWorkerPictures(@PathVariable("username") String username, @PathVariable("missionName") String missionName,
+                                     @PathVariable("workerName") String workerName, @PathVariable("order") String order) {
+        Accept accept = acceptService.getAcceptByMissionNameAndWorkerName(missionName, workerName);
+        int o = Integer.parseInt(order);
+        WorkerPicture workerPicture = workerPictureService.selectWorkerPictureByAccept(accept).get(o);
+        byte[] bytes = workerPicture.getPicture();
+        Base64.Encoder encoder = Base64.getEncoder();
+        String str = encoder.encodeToString(bytes);
+        return str;
+    }
+
+    @RequestMapping(value = "/viewMissionPictures/{missionName}/{order}", method = GET)
+    @ResponseBody
+    public String viewMissionPictures(@PathVariable("username") String username, @PathVariable("missionName") String missionName,
+                                      @PathVariable("order") String order){
+        Mission mission = missionService.getMissionByName(missionName);
+        int o = Integer.parseInt(order);
+        MissionPicture missionPicture = missionPictureService.selectMissionPicturesByMission(mission.getName()).get(o);
+        byte[] bytes = missionPicture.getPicture();
+        Base64.Encoder encoder = Base64.getEncoder();
+        String str = encoder.encodeToString(bytes);
+        return str;
     }
 
 

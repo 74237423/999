@@ -19,4 +19,6 @@ public interface AcceptService {
 
     public List<Mission>  getMissionsByWorkerName(String workerName);
 
+    public List<Accept> getAcceptByMissionName(String missionName);
+
 }

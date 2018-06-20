@@ -203,7 +203,7 @@ public class WorkQualityController {
             for (Mission m : allMission) {
                 //查找据ddl至少还有2天的任务
                 if (m.getEnd().compareTo(newDate) >= 0) {
-                     result.add(m);
+                    result.add(m);
                 }
 
 
