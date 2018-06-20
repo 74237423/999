@@ -411,7 +411,7 @@ public class WorkerController {
     @ResponseBody
     public boolean xy(@PathVariable("username") String username, @PathVariable("missionName") String missionName,
                      @PathVariable("order") String order, @PathVariable("xy") String xy){
-
+        System.out.println(xy);
         return true;
     }
 
