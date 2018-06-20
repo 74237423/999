@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cts.phase3.persistence.dao.MissionDao" >
+    <resultMap id="BaseResultMap" type="cts.phase3.persistence.model.Mission" >
+        <id column="id" property="id" jdbcType="INTEGER" />
+        <result column="mission_name" property="name" jdbcType="VARCHAR" />
+        <result column="start_time" property="start" jdbcType="VARCHAR" />
+        <result column="end_time" property="end" jdbcType="VARCHAR" />
+        <result column="points" property="points" jdbcType="INTEGER" />
+        <result column="needs" property="needs" jdbcType="INTEGER"/>
+        <result column="description" property="description" jdbcType="VARCHAR"/>
+        <result column="missiontype" property="type" jdbcType="VARCHAR"/>
+        <result column="way" property="way" jdbcType="VARCHAR"/>
+        <result column="difficultyClass" property="difficultyClass" jdbcType="VARCHAR"/>
+        <result column="accepts" property="accepts" jdbcType="INTEGER"/>
+    </resultMap>
+    <sql id="Base_Column_List" >
+        id, mission_name, start_time, end_time, points, needs, description, missiontype, way, difficultyClass, accepts
+    </sql>
+    <select id="findById" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+        select
+        <include refid="Base_Column_List" />
+        from mission
+        where id = #{id,jdbcType=INTEGER}
+    </select>
+    <select id="findByName" resultMap="BaseResultMap" parameterType="java.lang.String" >
+        select
+        <include refid="Base_Column_List" />
+        from mission
+        where mission_name = #{name,jdbcType=VARCHAR}
+    </select>
+    <select id="findByType" resultMap="BaseResultMap" parameterType="java.lang.String" >
+        select
+        <include refid="Base_Column_List" />
+        from mission
+        where missiontype = #{type,jdbcType=VARCHAR}
+    </select>
+    <select id="findByDifficultyClass" resultMap="BaseResultMap" parameterType="java.lang.String" >
+        select
+        <include refid="Base_Column_List" />
+        from mission
+        where difficultyClass = #{difficultyClass,jdbcType=VARCHAR}
+    </select>
+    <select id="findByEndTime" resultMap="BaseResultMap" parameterType="java.lang.String" >
+        select
+        <include refid="Base_Column_List" />
+        from mission
+        where endTime = #{end,jdbcType=VARCHAR}
+    </select>
+    <select id="allMission" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List" />
+        from mission
+    </select>
+    <delete id="deleteByName" parameterType="java.lang.Integer" >
+        delete from mission
+        where mission_name = #{name,jdbcType=VARCHAR}
+    </delete>
+    <delete id="deleteById" parameterType="java.lang.Integer" >
+        delete from mission
+        where id = #{id,jdbcType=INTEGER}
+    </delete>
+    <insert id="insert" parameterType="cts.phase3.persistence.model.Mission" >
+        insert into mission (mission_name, start_time, end_time, points, needs,
+        description, missiontype, way, difficultyClass, accepts)
+        values (#{name,jdbcType=VARCHAR},
+        #{start, jdbcType=VARCHAR}, #{end, jdbcType=VARCHAR}, #{points,jdbcType=INTEGER},#{needs,jdbcType=INTEGER},
+        #{description,jdbcType=VARCHAR}, #{type,jdbcType=VARCHAR}, #{way,jdbcType=VARCHAR}, #{difficultyClass,jdbcType=VARCHAR}, #{accepts,jdbcType=INTEGER})
+    </insert>
+    <update id="updateById" parameterType="cts.phase3.persistence.model.Mission" >
+        update mission
+        set
+        mission_name = #{name,jdbcType=VARCHAR},
+        start_time = #{start,jdbcType=VARCHAR},
+        end_time = #{end,jdbcType=VARCHAR},
+        points = #{points,jdbcType=INTEGER},
+        needs = #{points,jdbcType=INTEGER},
+        description = #{description,jdbcType=VARCHAR},
+        missiontype = #{type,jdbcType=VARCHAR},
+        way = #{way,jdbcType=VARCHAR},
+        difficultyClass = #{difficultyClass,jdbcType=VARCHAR},
+        accepts = #{accepts,jdbcType=INTEGER}
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+</mapper>

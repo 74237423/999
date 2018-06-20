@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cts.phase3.persistence.dao.ReleaseDao" >
+    <resultMap id="BaseResultMap" type="cts.phase3.persistence.model.Release" >
+        <id column="id" property="id" jdbcType="INTEGER" />
+        <result column="aname" property="announcerName" jdbcType="VARCHAR" />
+        <result column="mname" property="missionName" jdbcType="VARCHAR" />
+        <result column="start_time" property="start" jdbcType="VARCHAR"/>
+        <result column="end_time" property="end" jdbcType="VARCHAR" />
+        <result column="checkFlag" property="checkFlag" jdbcType="INTEGER" />
+    </resultMap>
+    <sql id="Base_Column_List" >
+        id, aname, mname, start_time, end_time
+    </sql>
+    <select id="findById" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+        select
+        <include refid="Base_Column_List" />
+        from release0
+        where id = #{id,jdbcType=INTEGER}
+    </select>
+    <select id="findByAnnouncerName" resultMap="BaseResultMap" parameterType="java.lang.String" >
+        select
+        <include refid="Base_Column_List" />
+        from release0
+        where aname = #{announcerName,jdbcType=VARCHAR}
+    </select>
+    <select id="findByMissionName" resultMap="BaseResultMap" parameterType="java.lang.String" >
+        select
+        <include refid="Base_Column_List" />
+        from release0
+        where mname = #{missionName,jdbcType=VARCHAR}
+    </select>
+    <select id="findByAnnouncerNameAndMissionName" resultMap="BaseResultMap" >
+        select
+        <include refid="Base_Column_List" />
+        from release0
+        where aname = #{announcerName,jdbcType=VARCHAR} AND mname = #{missionName,jdbcType=VARCHAR}
+    </select>
+    <select id="allRelease" resultMap="BaseResultMap" >
+        select
+        <include refid="Base_Column_List" />
+        from release0
+    </select>
+    <delete id="deleteById" parameterType="java.lang.Integer" >
+        delete from release0
+        where id = #{id,jdbcType=INTEGER}
+    </delete>
+    <insert id="insert" parameterType="cts.phase3.persistence.model.Release" >
+        insert into release0 (aname, mname, start_time, end_time, checkFlag)
+        values (#{announcerName,jdbcType=VARCHAR}, #{missionName,jdbcType=VARCHAR},
+        #{start,jdbcType=VARCHAR}, #{end,jdbcType=VARCHAR}, #{checkFlag,jdbcType=INTEGER})
+    </insert>
+    <update id="updateByPrimaryKey" parameterType="cts.phase3.persistence.model.Release" >
+        update release0
+        set  aname = #{announcerName,jdbcType=VARCHAR},
+        mname = #{missionName,jdbcType=VARCHAR},
+        start_time = #{start,jdbcType=VARCHAR},
+        end_time = #{end_time,jdbcType=VARCHAR},
+        checkFlag = #{checkFlag,jdbcType=INTEGER}
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+</mapper>

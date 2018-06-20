@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cts.phase3.persistence.dao.EvaluateDao" >
+    <resultMap id="BaseResultMap" type="cts.phase3.persistence.model.Evaluate" >
+        <id column="id" property="id" jdbcType="INTEGER" />
+        <result column="mname" property="missionName" jdbcType="VARCHAR" />
+        <result column="rname" property="raterName" jdbcType="VARCHAR" />
+        <result column="start_time" property="start" jdbcType="VARCHAR" />
+        <result column="end_time" property="end" jdbcType="VARCHAR" />
+        <result column="checkFlag" property="checkFlag" jdbcType="INTEGER" />
+        <result column="state0" property="state" jdbcType="INTEGER" />
+    </resultMap>
+    <sql id="Base_Column_List" >
+        id, mname, rname, start_time, end_time, checkFlag, state0
+    </sql>
+    <select id="findById" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+        select
+        <include refid="Base_Column_List" />
+        from evaluate
+        where id = #{id,jdbcType=INTEGER}
+    </select>
+    <select id="findByMissionName" resultMap="BaseResultMap" parameterType="java.lang.String" >
+        select
+        <include refid="Base_Column_List" />
+        from evaluate
+        where mname = #{missionName,jdbcType=VARCHAR}
+    </select>
+    <select id="findByRaterName" resultMap="BaseResultMap" parameterType="java.lang.String" >
+        select
+        <include refid="Base_Column_List" />
+        from evaluate
+        where rname = #{raterName,jdbcType=VARCHAR}
+    </select>
+    <select id="allEvaluate" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List" />
+        from evaluate
+    </select>
+    <delete id="deleteById" parameterType="java.lang.Integer" >
+        delete from evaluate
+        where id = #{id,jdbcType=INTEGER}
+    </delete>
+    <insert id="insert" parameterType="cts.phase3.persistence.model.Evaluate" >
+        insert into evaluate (mname, rname, start_time, end_time, checkFlag, state0)
+        values (#{missionName,jdbcType=VARCHAR}, #{raterName,jdbcType=VARCHAR},
+         #{start,jdbcType=VARCHAR}, #{end,jdbcType=VARCHAR}, #{checkFlag,jdbcType=INTEGER}, #{state,jdbcType=INTEGER})
+    </insert>
+    <update id="update" parameterType="cts.phase3.persistence.model.Evaluate" >
+        update evaluate
+        set mname = #{missionName,jdbcType=VARCHAR},
+        rname = #{raterName,jdbcType=VARCHAR},
+        start_time = #{start,jdbcType=VARCHAR},
+        end_time = #{end,jdbcType=VARCHAR},
+        checkFlag = #{checkFlag,jdbcType=INTEGER},
+        state0 = #{state,jdbcType=INTEGER}
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+    <select id="findEvaluateByRaterAndMission" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List" />
+        from evaluate
+        where rname = #{raterName,jdbcType=VARCHAR} and mname = #{missionName,jdbcType=VARCHAR}
+    </select>
+</mapper>

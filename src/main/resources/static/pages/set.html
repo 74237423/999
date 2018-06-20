@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>发布任务</title>
+
+    <link rel="stylesheet" href="../css/borain-timeChoice.css">
+    <link href="../css/bootstrap.min.css" rel="stylesheet">
+    <link href="../css/bootstrap-fileinput.css" rel="stylesheet">
+    <link href="../css/style.css" rel="stylesheet">
+    <!--font-awesome图标如果项目有就不用，如果没有就要调用-->
+    <link rel="stylesheet" type="text/css" href="http://cdn.bootcss.com/font-awesome/4.6.0/css/font-awesome.min.css">
+    <!--必要样式-->
+    <link rel="stylesheet" type="text/css" href="../css/component.css" />
+
+    <style type="text/css">
+        *{margin:0;padding:0;list-style-type:none;}
+        a,img{border:0;}
+        body{background-color: transparent; font:12px/180% Arial, Helvetica, sans-serif, "新宋体";}
+
+
+        #wizard {background-color: #ffffff; border:5px solid #789;font-size:12px;height:480px;margin:20px auto;width:530px;overflow:hidden;position:relative;-moz-border-radius:5px;-webkit-border-radius:5px;}
+        #wizard .items{width:20000px; clear:both; position:absolute;}
+        #wizard .right{float:right;}
+        #wizard #status{height:35px;background:#123;padding-left:25px !important;}
+        #status li{float:left;color:#fff;padding:10px 30px;}
+        #status li.active{background-color:#369;font-weight:normal;}
+
+        .page{padding:20px 30px;width:500px;float:left;}
+        .page h3{height:42px; font-size:16px; border-bottom:1px dotted #ccc; margin-bottom:20px; padding-bottom:5px}
+        .page h3 em{font-size:12px; font-weight:500; font-style:normal}
+        .page p{line-height:24px;}
+        .page p label{font-size:14px; display:block;}
+        .page p input{border: 1px solid #5B5757}
+        .btn_nav{height:36px; line-height:36px; margin:20px auto;}
+        .prev,.next{width:100px; height:32px; line-height:32px; border:1px solid #d3d3d3; cursor:pointer}
+        .cls_select_span {
+            position:absolute;
+            border:1pt solid #c1c1c1;
+            overflow:hidden;
+            width:188px;
+            height:25px;
+        }
+        .cls_input_span {
+            position:absolute;
+            width:169px;
+            height:25px;
+            border-top:1pt solid #c1c1c1;
+            border-left:1pt solid #c1c1c1;
+            border-bottom:1pt solid #c1c1c1;
+        }
+        .cls_option_defined {
+            color:#c2c2c2;
+        }
+        .cls_select {
+            width:188px;
+            height:25px;
+            margin:-2px;
+            z-index: 1000;
+        }
+        .cls_input {
+            width:169px;
+            height:25px;
+
+        }
+    </style>
+
+    <script src="../js/main.js"></script>
+    <script type="text/javascript" src="../js/jquery.min.js"></script>
+    <script type="text/javascript" src="../js/scrollable.js"></script>
+    <script type="text/javascript" src="../js/selectFilter.js"></script>
+    <script src="../js/borain-timeChoice.js"></script>
+    <script>(function(e,t,n){var r=e.querySelectorAll("html")[0];r.className=r.className.replace(/(^|\s)no-js(\s|$)/,"$1js$2")})(document,window,0);</script>
+
+</head>
+<body>
+
+
+<form id="form-release">
+    <div id="wizard">
+        <ul id="status">
+            <li class="active"><strong>1.</strong>创建任务</li>
+            <li><strong>2.</strong>任务内容</li>
+            <li><strong>3.</strong>完成</li>
+        </ul>
+        <div class="items">
+            <div class="page">
+                <h3>创建一个任务<br/><em>请填写您的任务的初步信息。</em></h3>
+                <p><label>任务名称：</label><input type="text" id="target_name" name="missionName"/></p>
+                <p><label>开始时间：</label><input class="start" type="text" value="" id="start" name="startTime"/>
+                    <label>结束时间：</label><input class="end" type="text" value="" id="end" name="endTime"/>
+                </p>
+
+                <p><label>奖励积分：</label><input type="text" class="input" name="points" id="points"  onkeyup="value=value.replace(/[^\d]/g,'')"/></p>
+                <p><label>所需工人个数：</label><input type="text" class="input" id="needed_workers" name="needs" onkeyup="value=value.replace(/[^\d]/g,'')"/></p>
+
+                <div class="btn_nav">
+                    <input type="button" class="next right" value="下一步&raquo;" />
+                </div>
+            </div>
+            <div class="page">
+                <h3>任务内容<br/><em>请填写任务详细信息。上传的图片压缩包名称请与任务名称一致。</em></h3>
+                <p><label>任务类型：</label><input list="types" id="way" name="way"/>
+                    <datalist id="types">
+                        <option value="标注题">
+                        <option value="框选题">
+                    </datalist>
+                </p>
+                <p><label>任务要求：</label><textarea rows="4" cols="40" id="requirements" name="description" placeholder="请填写具体要求"></textarea></p>
+                <p><label>图片上传：</label><div class="container">
+
+                <div class="content">
+
+                    <div class="box">
+                        <input type="file" name="file" id="file" class="inputfile inputfile-1" data-multiple-caption="{count} files selected" multiple accept="aplication/zip"/>
+                        <label for="file"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="17" viewBox="0 0 20 17"><path d="M10 0l-5.2 4.9h3.3v5.1h3.8v-5.1h3.3l-5.2-4.9zm9.3 11.5l-3.2-2.1h-2l3.4 2.6h-3.5c-.1 0-.2.1-.2.1l-.8 2.3h-6l-.8-2.2c-.1-.1-.1-.2-.2-.2h-3.6l3.4-2.6h-2l-3.2 2.1c-.4.3-.7 1-.6 1.5l.6 3.1c.1.5.7.9 1.2.9h16.3c.6 0 1.1-.4 1.3-.9l.6-3.1c.1-.5-.2-1.2-.7-1.5z"/></svg> <span>Choose a file&hellip;</span></label>
+                    </div>
+
+                </div>
+
+            </div><!-- /container --></p>
+
+
+                <script src="../js/custom-file-input.js"></script>
+                <div class="btn_nav">
+                    <input type="button" class="prev" style="float:left" value="&laquo;上一步" />
+                    <input type="button" class="next right" value="下一步&raquo;" />
+                </div>
+            </div>
+            <div class="page">
+                <h3>完成<br/><em>填写或选择任务内容分类后点击确定完成。</em></h3>
+                <p><label>任务内容分类：</label></p>
+                <span class="cls_select_span">
+        <select id="id_select" name="category" class="cls_select" onChange="selectOnChangeFunc()">
+            <option value="" class="cls_option_defined">自定义</option>
+            <option value="动物">动物</option>
+            <option value="人物">人物</option>
+            <option value="水果">水果</option>
+			<option value="汽车">汽车</option>
+			<option value="衣服">衣服</option>
+            <option value="动物">动物</option>
+            <option value="人物">人物</option>
+            <option value="水果">水果</option>
+			<option value="汽车">汽车</option>
+			<option value="衣服">衣服</option>
+            <option value="动物">动物</option>
+            <option value="人物">人物</option>
+            <option value="水果">水果</option>
+			<option value="汽车">汽车</option>
+			<option value="衣服">衣服</option>
+        </select>
+    </span>
+                <span class="cls_input_span">
+        <input type="text" id="id_input" class="cls_input"  placeholder="可以自行输入">
+    </span>
+                <br/>
+                <br/>
+                <p><label>任务等级：</label><select id="task_level" name="difficultyClass" class="cls_select">
+                    <option value="简单">简单</option>
+                    <option value="一般">一般</option>
+                    <option value="困难">困难</option>
+                </select></p>
+                <br/>
+                <p>请点击“确定”按钮完成。</p>
+                <br/>
+
+                <br/>
+                <div class="btn_nav">
+                    <input type="button" class="prev" style="float:left" value="&laquo;上一步" />
+                    <input type="button" class="next right" id="sub" value="确定" />
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+
+<script>
+    function selectOnChangeFunc() {
+        document.getElementById('id_input').value = document.getElementById('id_select').options[document.getElementById('id_select').selectedIndex].value;
+    }
+</script>
+<script type="text/javascript">
+    //  level分为 YM YMD H HM 四个有效值，分别表示年月 年月日 年月日时 年月日时分,less表示是否不可小于当前时间。年-月-日 时:分 时为24小时制
+    //  为确保控件结构只出现一次，在有需要的时候进行一次调用。
+    onLoadTimeChoiceDemo();
+
+    borainTimeChoice({
+        start:".start",
+        end:".end",
+        level:"YMD",
+        less:true
+    });
+
+    //这里是初始化
+    $('.filter-box').selectFilter({
+        callBack : function (val){
+            //返回选择的值
+            console.log(val+'-是返回的值')
+        }
+    });
+    $(function(){
+
+        $("#wizard").scrollable({
+            onSeek: function(event,i){
+                $("#status li").removeClass("active").eq(i).addClass("active");
+            }
+
+        });
+
+
+
+    });
+</script>
+
+<script>
+    //上传任务
+    var url = document.referrer;
+    var index1 = url.indexOf('_');
+    var username = url.substr(index1 + 1, url.length);
+    $("#sub").click(function () {
+        /*var target_name = document.getElementById("target_name").value;
+        var start=document.getElementById("start").value;
+        var end=document.getElementById("end").value;
+        var points=document.getElementById("points").value;
+        var needed_workers=document.getElementById("needed_workers").value;
+        var requirements=document.getElementById("requirements").value;
+        var types=document.getElementById("type").value;
+        var content_types=document.getElementById("id_select").value;
+        var degree=document.getElementById("task_level").value;//简单1，一般2，困难3
+        var missionStr = target_name + '_' + start + '_' + end + '_' + points + '_' + needed_workers
+            + '_' + requirements + '_' + types + '_' + content_types;
+        $.ajax({
+            type:'POST',
+            url:'/announcer/' + username + '/release/' + missionStr,
+            dataType:"text",
+            success:function (data) {
+                alert(data);
+            },
+            error:function (data) {
+                alert(data);
+            }
+        });*/
+        var formData = new FormData($("#form-release")[0]);
+        $.ajax({
+            url:'/'+username+'/release',
+            type:'POST',
+            data:formData,
+            async: false,
+            cache: false,
+            contentType: false,
+            processData: false,
+            success:function (data) {
+                alert(data);
+                location.reload();
+            },
+            error:function (data) {
+                alert(data);
+                alert("error");
+            }
+        });
+    });
+
+</script>
+</body>
+</html>

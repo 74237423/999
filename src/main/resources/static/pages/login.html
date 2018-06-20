@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>登录</title>
+
+    <link rel="stylesheet" type="text/css" href="">
+    <link href="../assets/css/bootstrap.min.css" rel="stylesheet">
+    <link href="../assets/css/bootstrap-theme.min.css" rel="stylesheet">
+    <link href="../assets/css/font-awesome.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,400i,600,700,700i" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Crimson+Text:400,700,700i|Josefin+Sans:700" rel="stylesheet">
+    <link href="../assets/css/main.css" rel="stylesheet">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.2/animate.min.css">
+    <link rel="stylesheet" type="text/css" href="../assets/css/style.css"/>
+    <script src = "../js/jquery.js"></script>
+    <script>
+        function GetQueryString(name)
+        {
+            var reg = new RegExp("(^|&)"+ name +"=([^&]*)(&|$)");
+            var r = window.location.search.substr(1).match(reg);//search,查询？后面的参数，并匹配正则
+            if(r!=null)
+                return  unescape(r[2]);
+            else
+                return null;
+        }
+        function jump_register() {
+            var role = document.getElementById("type_of_login");
+            var rolename = role.innerText;
+            window.open("register.html?role="+rolename,self);
+        }
+    </script>
+    <style>
+        body{
+            background-image: url(../img/fifth_bg.jpg);
+        }
+    </style>
+</head>
+
+<body>
+
+<div id="work_scroll" class="pages">                                  <!-- Work starts here -->
+    <div class="container main">
+        <div class="row">
+            <div class="col-md-6" id="work_left">
+                <div id="owl-demo" class="owl-carousel owl-theme">
+                    <div class="item"><img class="img-responsive img-rabbit" src="../assets/images/work.jpg"></div>
+                </div>
+            </div>
+
+            <div class="col-md-6" id="work_right" >
+                <a href="/pages/first_home.html" class="btn btn-rabbit back"> <i class="fa fa-angle-left" aria-hidden="true"></i> Back to Home </a>
+
+                <div class="login-container">
+                    <h1 id="type_of_login"></h1>
+                    <form id="loginForm" name="lf">
+                        <div>
+                            <input type="text" name="username" class="name" placeholder="用户名" autocomplete="off"/>
+                        </div>
+                        <div>
+                            <input type="password" name="password" class="password" placeholder="密码" oncontextmenu="return false" onpaste="return false" />
+                        </div>
+                        <button type="button" onclick="submitFunction()">登 录</button>
+                    </form>
+
+                    <a onclick="jump_register()">
+                        <button type="button" class="register-tis" >还没有账号？</button>
+                    </a>
+
+                </div>
+            </div>
+
+
+        </div>
+    </div>
+</div>
+<script>
+    var h = document.getElementById("type_of_login");
+    h.innerText = GetQueryString("role");
+</script>
+
+<script>
+    function submitFunction() {
+        var h = document.getElementById("type_of_login");
+        h.innerText = GetQueryString("role");
+        var role=h.innerText;
+        var username=document.lf.username.value;
+        var password=document.lf.password.value;
+        var id=-1;
+        if(role=="boss"){
+            id=0;
+        }
+        else if(role=="estimator"){
+            id=1;
+        }
+        else if(role=="worker"){
+            id=2;
+        }
+        else if(role=="admin"){
+            id=3;
+        }
+
+        if(username==""){
+            alert("用户名不能为空");
+        }
+        else if(password==""){
+            alert("密码不能为空");
+        }
+        else{
+            var str = username+'_'+password+'_'+id;
+            $.ajax({
+                type:'POST',
+                url:'/lr/login/'+str,
+                dataType:"text",
+                success:function (data) {
+                    if(data == "admin")
+                        location.href = "/admin";
+                    else if(data == "match")
+                        location.href = "/" + role + "_" + username;
+                    else if(data=="w not match" || data=="a not match" || data=="r not match"){
+                        alert("密码错误");
+                    }
+                    else if(data=="error"){
+                        alert("找不到该用户");
+                    }
+                    else{
+                        alert("连接异常");
+                    }
+                },
+                error:function (data) {
+                    alert("error连接异常");
+                }
+            });
+        }
+    };
+
+</script>
+</body>
+</html>

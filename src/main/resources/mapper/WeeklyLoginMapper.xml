@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cts.phase3.persistence.dao.WeeklyDao" >
+    <resultMap id="BaseResultMap" type="cts.phase3.persistence.model.Weekly" >
+        <id column="id" property="id" jdbcType="INTEGER" />
+        <result column="mon" property="mon" jdbcType="INTEGER" />
+        <result column="tue" property="tue" jdbcType="INTEGER" />
+        <result column="wed" property="wed" jdbcType="INTEGER" />
+        <result column="thu" property="thu" jdbcType="INTEGER" />
+        <result column="fri" property="fri" jdbcType="INTEGER"/>
+        <result column="sat" property="sat" jdbcType="INTEGER"/>
+        <result column="sun" property="sun" jdbcType="INTEGER" />
+        <result column="lastStr" property="lastStr" jdbcType="VARCHAR" />
+    </resultMap>
+    <sql id="Base_Column_List" >
+        id, mon, tue, wed, thu, fri, sat, sun, lastStr
+    </sql>
+    <select id="findById" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+        select
+        <include refid="Base_Column_List" />
+        from weeklylogin where id = #{id,jdbcType=INTEGER}
+    </select>
+    <insert id="insert" parameterType="cts.phase3.persistence.model.Weekly" >
+        insert into weeklylogin (id, mon, tue, wed, thu, fri, sat, sun, lastStr)
+        values (#{id,jdbcType=INTEGER},#{mon,jdbcType=INTEGER}, #{tue,jdbcType=INTEGER}, #{wed,jdbcType=INTEGER},
+        #{thu,jdbcType=INTEGER}, #{fri,jdbcType=INTEGER}, #{sat,jdbcType=INTEGER}, #{sun,jdbcType=INTEGER}, #{lastStr,jdbcType=VARCHAR})
+    </insert>
+    <update id="update" parameterType="cts.phase3.persistence.model.Weekly" >
+        update weeklylogin
+        set mon = #{mon,jdbcType=INTEGER},
+        tue = #{tue,jdbcType=INTEGER},
+        wed = #{wed,jdbcType=INTEGER},
+        thu = #{thu,jdbcType=INTEGER},
+        fri = #{fri,jdbcType=INTEGER},
+        sat = #{sat,jdbcType=INTEGER},
+        sun = #{sun,jdbcType=INTEGER},
+        lastStr = #{lastStr,jdbcType=VARCHAR}
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+</mapper>

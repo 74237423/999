@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+    <link rel="stylesheet" href="../css/tablestyle.css" type="text/css">
+</head>
+<style>
+    span a{
+    width:100px;
+    height: 35px;
+    line-height: 39px;
+    text-align: center;
+    border: #fff solid;
+    display: block;
+    font-size: 16px;
+    border-radius: 10px;
+}
+    span a:hover{
+        background-color: #fff;
+        color: #000;
+        cursor:pointer;
+}
+    td a{
+        line-height: 25px;
+        text-align: center;
+        display: block;
+        font-size: 16px;
+        border-radius: 5px;
+    }
+    td a:hover{
+        color: red;
+        transform:scale(1.2);
+        -webkit-transform:scale(1.2);
+        -moz-transform:scale(1.2);
+        -o-transform:scale(1.2);
+        -ms-transform:scale(1.2);
+        cursor:pointer;
+    }
+
+</style>
+<body>
+<div>
+
+    <span><a >back</a></span>
+    <table class="zebra">
+        <caption>完成信息</caption>
+        <thead>
+        <tr>
+            <th>工人</th>
+            <th>正确率</th>
+            <th>工人获得积分</th>
+            <th>审评员</th>
+            <th>审评员获得积分</th>
+            <th>操作</th>
+        </tr>
+        <tbody id="tbMain"></tbody>
+    </table>
+</div>
+<script>
+    //模拟一段JSON数据，实际要从数据库中读取
+    var per = [
+        {worker:'A',percent:'90%',point1:90,estimate:'B',point2:2},
+        {worker:'N',percent:'60%',point1:60,estimate:'B',point2:2},
+        {worker:'T',percent:'70%',point1:70,estimate:'B',point2:2}
+    ];
+    function getDataRow(h){
+        var row = document.createElement('tr'); //创建行
+
+        var Cell1 = document.createElement('td'); //创建第一列
+        Cell1.innerHTML = h.worker; //填充数据
+        row.appendChild(Cell1);
+        var Cell2 = document.createElement('td');
+        Cell2.innerHTML = h.percent; //填充数据
+        row.appendChild(Cell2);
+        var Cell3 = document.createElement('td');
+        Cell3.innerHTML = h.point1; //填充数据
+        row.appendChild(Cell3);
+        var Cell4 = document.createElement('td');
+        Cell4.innerHTML = h.estimate; //填充数据
+        row.appendChild(Cell4);
+        var Cell5 = document.createElement('td');
+        Cell5.innerHTML = h.point2; //填充数据
+        row.appendChild(Cell5);
+        var Cell6 = document.createElement('td');
+        Cell6.innerHTML = "<a>查看具体任务完成情况</a>"; //填充数据
+        row.appendChild(Cell6); //监听添加跳转@沈嘉伟
+        return row;
+    }
+    window.onload = function(){
+        var tbody = document.getElementById('tbMain');
+
+        for(var i = 0;i < per.length; i++){ //遍历一下json数据
+            var trow = getDataRow(per[i]); //定义一个方法,返回tr数据
+            tbody.appendChild(trow);
+        }
+
+    }
+
+
+</script>
+</body>
+</html>

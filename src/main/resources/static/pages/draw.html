@@ -1,0 +1,412 @@
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>画布</title>
+    <link rel="stylesheet" type="text/css" href="../css/buttons.css" />
+    <link rel="stylesheet" type="text/css" href="../css/font-awesome.min.css">
+    <style>
+        body, html { height: 100%; background: #F2F2F2;}
+        * { margin: 0; padding: 0 }
+        body { font: 14px "微软雅黑", "FontAwesome", "Arial Narrow", HELVETICA; -webkit-text-size-adjust: 100%; }
+        li { list-style: none }
+        a { text-decoration: none; }
+        /* navMenu */
+        .navMenubox { width: 220px;background: #1c2229;}
+        .navMenu-top { padding: 10px; color: #fff; border-bottom: 1px solid rgba(255,255,255,.1) }
+        .navMenu> li { display: block; margin: 0; padding: 0; border: 0; }
+        .navMenu>li>a { display: block; overflow: hidden; padding-left: 0; line-height: 40px; color: #ABB1B7; transition: all .3s; position: relative; text-decoration: none; font-size: 17px; border-top: 1px solid #222932; border-bottom: 2px solid #191e24; }
+        .navMenu > li:nth-of-type(1)> a { border-top: 1px solid transparent; }
+        .navMenu > li:last-child > a { border-bottom: 1px solid transparent; }
+        .navMenu>li>a>i { font-size: 20px; float: left; font-style: normal; margin: 0 5px; }
+        .navMenu li a .arrow:before { display: block; float: right; margin-top: 1px; margin-right: 15px; display: inline; font-size: 16px; font-family: FontAwesome; height: auto; content: "\f105"; font-weight: 300; text-shadow: none; }
+        .navMenu li a .arrow.open:before { float: right; margin-top: 1px; margin-right: 15px; display: inline; font-family: FontAwesome; height: auto; font-size: 16px; content: "\f107"; font-weight: 300; text-shadow: none; }
+        .navMenu>li>a.active, .navMenu>li>a:hover { color: #FFF; background: #12181b; }
+        .navMenu>li>ul.sub-menu, .navMenu>li>ul.sub-menu>li>ul.sub-menu { display: none; list-style: none; clear: both; margin: 8px 0px 0px 10px; padding-bottom: 5px; }
+        .navMenu>li.active > ul.sub-menu, .navMenu>li>ul.sub-menu>li.active >ul.sub-menu { }
+        .navMenu>li>ul.sub-menu li { background: none; margin: 0; padding: 0; }
+        .navMenu>li>ul.sub-menu li>a { display: block; font-size: 16px; line-height: 36px; padding-left: 20px; color: #ABB1B7; clear: both; }
+        .navMenu>li>ul.sub-menu li>a.active, .navMenu>li>ul.sub-menu li>a:hover, .navMenu>li>ul.sub-menu>li.active >a { color: #FFF; background: #12181b; }
+        .icon_1:before { content: "\f0ac"; }
+        /*---------------------*/
+    </style>
+</head>
+<body>
+<div class="navMenubox" style="height: 770px">
+    <div id="slimtest1">
+        <div class="navMenu-top">
+            <div id="mini" style=""><i class="fa fa-bars fa-2x"></i></div>
+        </div>
+        <ul class="navMenu">
+            <li><a href="javascript:;" class="afinve"> <em class="icon_1"></em> <span>任务细分列表</span> <span class="arrow"></span></a>
+                <ul class="sub-menu" id="picture_list">
+                </ul>
+            </li>
+
+            <li>
+                <a  class="afinve" id="submit"><em class="icon_1"></em><span>提交任务</span></a>
+                <!--<button name="submit" id="submit" type="button">提交任务</button>-->
+            </li>
+            <li>
+                <a  class="afinve" onclick="back()"><em class="icon_1"></em><span>返回</span></a>
+                <!--<button name="submit" id="submit" type="button">提交任务</button>-->
+            </li>
+        </ul>
+    </div>
+</div>
+
+
+<div style="position: absolute;top: 0;left:230px">
+    <p id="requirements">任务要求</p>
+    <div class="picture" style="height:530px;width:1090px;background: no-repeat center" id="canvas_background">
+        <canvas id="canvas" width="1090px" height="530px" style="border: #2c3947 solid 2px"></canvas>
+    </div>
+    <div class="box bg-1" id="test">
+        <button class="button button--winona button--border-thin button--round-s" data-text="保存" id="save" onclick="save()"><span>保存</span></button>
+        <button class="button button--winona button--border-thin button--round-s" data-text="撤销" id="li-seven"><span>撤销</span></button>
+        <button class="button button--winona button--border-thin button--round-s" data-text="清空" id="clear"><span>清空</span></button>
+        <button class="button button--winona button--border-thin button--round-s" data-text="矩形" id="li-two"><span>矩形</span></button>
+        <button class="button button--winona button--border-thin button--round-s" data-text="直线" id="li-five"><span>直线</span></button>
+        <button class="button button--winona button--border-thin button--round-s" data-text="圆形" id="li-three"><span>圆形</span></button>
+    </div>
+    <input type="color" id="color" style="height: 45px;position: relative;top: 10px"/>
+</div>
+    <script src="http://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
+    <script>
+        var mode=0;
+        var canvas = document.getElementById('canvas'); // 得到画布
+        var ctx = canvas.getContext('2d'); // 得到画布的上下文对象
+        var flag = false;
+        var x = 0; // 鼠标开始移动的位置X
+        var y = 0; // 鼠标开始移动的位置Y
+        var a=0;//路径上的坐标
+        var b=0;//路径上的坐标
+        var url = canvas.toDataURL(); // canvas图片的二进制格式转为dataURL格式
+        ctx.strokeStyle = document.getElementById("color").value.toString();
+        var cmdNumber=0;
+        var history=new Array();
+        var m=0;
+        var n=0;
+        $("#li-two").click(function () {
+            mode=2;
+        });
+        $("#li-three").click(function () {
+            mode=3;
+        });
+        $("#li-five").click(function () {
+            mode=5;
+        });
+        $("#li-six").click(function () {
+            mode=6;
+        });
+        $("#li-seven").click(function () {
+            mode=7;
+            undo();
+        });
+        $("#clear").click(function () {
+            mode=8;
+            clear();
+        });
+        $("#submit").click(function () {
+            mode=9;
+            var username = getUsername();
+            var missionName = getMissionName();
+            $.ajax({
+                url:'/' + username + '/finishDraw/' + missionName,
+                type:'POST',
+                dataType:'text',
+                success:function (data) {
+                    if(data == "false")
+                        alert("重复提交！");
+                    else if(data == "true")
+                        alert("提交成功！请耐心等待审批！");
+                },
+                error:function (data) {
+                    alert("error");
+                }
+            });
+        });
+
+        $('canvas').mousedown(function (e) {
+            ctx.strokeStyle = document.getElementById("color").value.toString();
+            history[cmdNumber]=$('canvas')[0].toDataURL();
+            cmdNumber=cmdNumber+1;
+            flag = true;
+            x = e.offsetX; // 鼠标落下时的X
+            y = e.offsetY; // 鼠标落下时的Y
+        }).mouseup(function (e) {
+            flag = false;
+
+            if(mode==5){
+                ctx.moveTo(x, y);
+                ctx.lineTo(e.offsetX, e.offsetY);
+                ctx.stroke(); // 调用绘制方法
+            }
+            url = $('canvas')[0].toDataURL(); // 每次 mouseup 都保存一次画布状态
+            //m = e.offsetX; // 鼠标落下时的X
+            //n = e.offsetY; // 鼠标落下时的Y
+        }).mousemove(function (e) {
+            if(mode==2) {
+                drawRect(e); // 绘制方法
+
+            }
+            if(mode==3){
+                drawCircle(e);
+
+            }
+            if(mode==5){
+                drawPencil(e);
+
+            }
+        });
+        function drawRect(e) {
+            if (flag) {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                ctx.beginPath();
+                ctx.strokeRect(x, y, e.offsetX - x, e.offsetY - y);
+                loadImage();
+            }
+        }
+        function loadImage() {
+            var img = new Image();
+            img.src = url;
+            ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+        }
+        function drawCircle(e){
+            if(flag){
+                ctx.clearRect(0,0,canvas.width,canvas.height);
+                ctx.beginPath();
+                var rx = (e.offsetX-x)/2;
+                var ry = (e.offsetY-y)/2;
+                var r = Math.sqrt(rx*rx+ry*ry);
+                ctx.arc(rx+x,ry+y,r,0,Math.PI*2); // 第5个参数默认是false-顺时针
+                ctx.stroke();
+                loadImage();
+            }
+        }
+        function drawPencil(e) {//flag=true mousedown
+            if (flag){
+                loadImage();
+            }
+        }
+        function undo() {
+            if (cmdNumber > 0) {
+                ctx.clearRect(0, 0, 1350, 600);
+                cmdNumber = cmdNumber - 1;
+                url = history[cmdNumber];
+                var img = new Image();
+                img.src = url;
+                img.onload = function () {
+                    ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+                };
+            }
+        }
+        function clear(){
+            ctx.clearRect(0,0,canvas.width,canvas.height);
+            url=$('canvas')[0].toDataURL();
+        }
+
+    </script>
+<script src="http://www.jq22.com/jquery/jquery-1.10.2.js"></script>
+    <script src="../js/jquery.slimscroll.min.js"></script>
+    <script>
+        $(function(){
+            // nav收缩展开
+            $('.navMenu li a').on('click',function(){
+                var parent = $(this).parent().parent();//获取当前页签的父级的父级
+                var labeul =$(this).parent("li").find(">ul");
+                if ($(this).parent().hasClass('open') == false) {
+                    //展开未展开
+                    parent.find('ul').slideUp(300);
+                    parent.find("li").removeClass("open");
+                    parent.find('li a').removeClass("active").find(".arrow").removeClass("open");
+                    $(this).parent("li").addClass("open").find(labeul).slideDown(300);
+                    $(this).addClass("active").find(".arrow").addClass("open")
+                }else{
+                    $(this).parent("li").removeClass("open").find(labeul).slideUp(300);
+                    if($(this).parent().find("ul").length>0){
+                        $(this).removeClass("active").find(".arrow").removeClass("open")
+                    }else{
+                        $(this).addClass("active")
+                    }
+                }
+
+            });
+        });
+    </script>
+
+</body>
+</html>
+
+<script>
+    var index=0;
+    function getBase64Image(img) { //img为image类型
+        var canvas = document.createElement("canvas");
+        canvas.width = img.width;
+        canvas.height = img.height;
+        var ctx = canvas.getContext("2d");
+        ctx.drawImage(img, 0, 0, img.width, img.height);
+        var ext = img.src.substring(img.src.lastIndexOf(".")+1).toLowerCase();
+        var dataURL = canvas.toDataURL("image/"+ext);
+        return dataURL;
+    }
+    function save() {
+        var canvas=document.getElementById("canvas");
+        var url=canvas.toDataURL();
+        url=url.substr(22);
+        while (url.indexOf('/') > 0){
+            url=url.replace('/', '_');
+        }
+        //alert(index);
+        var username=getUsername();
+        var mission=getMissionName();
+        //alert(url);
+        $.ajax({
+            type:'POST',
+            url:'/' + username + '/saveDraw/' + mission + '/' + index+'/'+url,
+            dataType:'text',
+            success:function (data) {
+               alert("保存成功");
+            },
+            error:function (data) {
+                alert("保存失败");
+            }
+        });
+    }
+    function test_button() {
+        var url=document.getElementById("canvas").toDataURL();
+        var img=document.createElement("img");
+        img.src=url;
+        var test=document.getElementById("test");
+        test.appendChild(img);
+    }
+
+
+    function picture_ajax(user, mission, i) {
+
+        var canvas=document.getElementById("canvas");
+        var ctx=canvas.getContext('2d');
+
+        $.ajax({
+            type:'POST',
+            url:'/' + user + '/loadDrawBackground/' + mission + '/' + i,
+            dataType:'text',
+            success:function (data) {
+                var url="data:image/jpg;base64,"+data;
+                var image=new Image();
+                image.src=url;
+                //image.width=image.width/2;
+                //image.height=image.height/2;
+                var width=image.width;
+                var height=image.height;
+                canvas.width=width;
+                canvas.height=height;
+                canvas.style.background='url('+url+') no-repeat';
+                var div=document.getElementById("canvas_background");
+                div.style="height:"+height+";width:"+width+";background: no-repeat center";
+                image.onload = function(){ //onload必须使用
+                    $.ajax({
+                        type:'POST',
+                        url:'/' + user + '/loadDrawCanvas/' + mission + '/' + i,
+                        dataType:'text',
+                        success:function (data) {
+                            var Url="data:image/jpg;base64,"+data;
+                            var img=new Image();
+                            img.src=Url;
+                            //image.width=image.width/2;
+                            //image.height=image.height/2;
+                            ctx.drawImage(img,0,0);
+
+                        },
+                        error:function (data) {
+                            alert("图片加载失败");
+                        }
+                    });
+                }
+            },
+            error:function (data) {
+                alert("图片加载失败");
+            }
+        });
+
+    }
+    function getUsername() {
+        var url=window.location.href;
+        var index1 = url.indexOf("/");
+        var subStr = url.substr(index1+2);
+        index1 = subStr.indexOf("/");
+        subStr = subStr.substr(index1+1);
+        index1 = subStr.indexOf("_");
+        subStr = subStr.substr(0, index1);
+        return subStr;
+    }
+    function getMissionName() {
+        var url=window.location.href;
+        var index = url.indexOf("_");
+        var subStr = url.substr(index + 1, url.length);
+        index = subStr.indexOf("_");
+        subStr = subStr.substr(index + 1, subStr.length);
+        return subStr;
+    }
+</script>
+
+<script>
+    var username = getUsername();
+    var mission_name = getMissionName();
+    var picture_list=document.getElementById("picture_list");
+    //alert(mission_name);
+    /*
+    <li><a href="javascript:;"><span>图片1</span></a></li>
+     */
+    $.ajax({
+        type:'POST',
+        url:'/' + username + '/loadDraw/' + mission_name,
+        dataType:'text',
+        success:function (data) {
+            var num=data;
+            for(let i=0;i<num;i++){
+                let li=document.createElement("li");
+                let a=document.createElement("a");
+                a.href="javascript:;";
+                let span=document.createElement("span");
+                let j = i + 1;
+                span.innerHTML="图片"+j;
+                li.onclick=function (ev) {
+                    clear();
+                    picture_ajax(username, mission_name, i);
+
+                    index=i;
+                };
+                a.appendChild(span);
+                li.appendChild(a);
+                picture_list.appendChild(li);
+            }
+        },
+        error:function (data) {
+            alert("图片列表加载失败");
+        }
+    });
+    $.ajax({
+        type:'GET',
+        url:'/'+username+'/worker/loadAccepted',
+        dataType:'text',
+        success:function (data) {
+            var mess=new Array();
+            mess=data.split('_');
+            for(let i=0;i<mess.length;i++){
+                var obj=eval('('+mess[i]+')');
+                if(obj.missionName==mission_name) {
+                    var needs=obj.description;
+                    var p=document.getElementById("requirements");
+                    p.innerHTML="任务要求:"+needs;
+                }
+            }
+        },
+        error:function (data) {
+
+        }
+    });
+    function back() {
+        window.history.go(-1);
+    }
+
+</script>

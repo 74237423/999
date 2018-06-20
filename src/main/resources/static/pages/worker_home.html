@@ -1,0 +1,589 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>工人主界面</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+
+    <link rel="stylesheet" href="../css/bootstrap.min.css">
+    <link rel="stylesheet" href="../css/bootstrap-theme.min.css">
+    <link rel="stylesheet" href="../css/fontAwesome.css">
+    <link rel="stylesheet" href="../css/light-box.css">
+    <link rel="stylesheet" href="../css/templatemo-main.css">
+    <link rel="stylesheet" href="../css/touxiang.css">
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700,800" rel="stylesheet">
+
+    <script src="../js/vendor/modernizr-2.8.3-respond-1.4.2.min.js"></script>
+    <style>
+        .lingqu a{
+            color: #fff;
+            width:100px;
+            height: 35px;
+            line-height: 29px;
+            text-align: center;
+            border: #fff solid;
+            display: block;
+            font-size: 16px;
+            border-radius: 10px;
+        }
+        .lingqu a:hover{
+            background-color: #fff;
+            color: #000;
+            cursor:pointer;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="sequence">
+
+    <div class="seq-preloader">
+        <svg width="39" height="16" viewBox="0 0 39 16" xmlns="http://www.w3.org/2000/svg" class="seq-preload-indicator"><g fill="#F96D38"><path class="seq-preload-circle seq-preload-circle-1" d="M3.999 12.012c2.209 0 3.999-1.791 3.999-3.999s-1.79-3.999-3.999-3.999-3.999 1.791-3.999 3.999 1.79 3.999 3.999 3.999z"/><path class="seq-preload-circle seq-preload-circle-2" d="M15.996 13.468c3.018 0 5.465-2.447 5.465-5.466 0-3.018-2.447-5.465-5.465-5.465-3.019 0-5.466 2.447-5.466 5.465 0 3.019 2.447 5.466 5.466 5.466z"/><path class="seq-preload-circle seq-preload-circle-3" d="M31.322 15.334c4.049 0 7.332-3.282 7.332-7.332 0-4.049-3.282-7.332-7.332-7.332s-7.332 3.283-7.332 7.332c0 4.05 3.283 7.332 7.332 7.332z"/></g></svg>
+    </div>
+
+</div>
+
+
+<nav style="height: available">
+    <div class="logo" style="color: #fff" title="登出" id="logout">
+        <img src="../img/akalin.jpg" alt="" style="height: 50px;width: 50px; border-radius:50%;border: 2px solid" id="touxiang"><span id="username">161250049</span>
+
+    </div>
+    <ul>
+        <li><a href="#1"><em class="fa fa-home"></em> <em>工人主页</em></a></li>
+        <li><a href="#2"><em class="fa fa-envelope"></em> <em>系统信息</em></a></li>
+        <li><a href="#3"><em class="fa fa-pencil"></em> <em>我的任务</em></a></li>
+        <li><a href="#4"><em class="fa fa-image"></em> <em>市场任务</em></a></li>
+        <li><a href="#5"><i class="fa fa-user"></i> <em>个人信息</em></a></li>
+    </ul>
+</nav>
+
+<div class="slides">
+    <div class="slide" id="1">
+        <div class="content first-content">
+            <div class="container-fluid">
+                <div class="col-md-3">
+                    <div class="author-image"><img src="../img/author_image.png" alt=""></div>
+                </div>
+                <div class="col-md-9">
+                    <h2>欢迎使用我们的众包系统</h2>
+                    <p> 在这里您可以通过做一些众包任务获取一定的奖励积分。如果您有兴趣成为一个众包任务发布者，您需要注册一个发布者的账号。感谢您的使用！</p>
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="slide" id="2">
+        <div class="content second-content">
+            <div class="container-fluid">
+                <div class="col-md-6">
+                    <div class="left-content">
+                        <h2>你收到的系统信息</h2>
+                        <div id="messageTable"></div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="right-image">
+                        <img src="../img/about_image.jpg" alt="">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="slide" id="3">
+        <div class="content fourth-content">
+            <div class="container-fluid">
+                <div class="row" id="my_tasks">
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="slide" id="4">
+        <div class="content fourth-content">
+            <div class="container-fluid">
+                <div class="row" id="all_tasks">
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="slide" id="5">
+        <div class="content fifth-content">
+            <div class="container-fluid">
+                <div class="col-md-6">
+                    <div id="map">
+
+                        <div  style="border:0;color: #FDFDFD" ><div class="con4">
+                            <canvas id="cvs" width="120" height="120"></canvas>
+                            <span class="btn upload">上传头像<input type="file" class="upload_pic" id="upload" /></span>
+                        </div><h4 id="ID">ID:<em></em></h4><h4 id="points">积分累计：<em></em></h4><h4 id="finishedMissions">已完成任务数：<em></em></h4><h4 id="rank">排名：<em></em></h4></div>
+                    </div>
+                </div>
+                <div class="col-md-6" style="text-align : left;color:#66afe9;font-size:13px">
+                    <form class="form-inline" name="contact" id="contact">
+                        <div class="row">
+                            <div class="col-md-12">
+
+                                <fieldset>
+                                    <label>邮箱：</label>
+                                    <input name="email" type="email" class="form-control" id="email" placeholder="Your email..." style="width: 85%"/>
+                                </fieldset>
+                            </div>
+                            <div class="col-md-12">
+                                <fieldset>
+                                    <label>密码：</label><input name="password" type="text" class="form-control" id="password" placeholder="password" style="width: 85%"/>
+                                </fieldset>
+                            </div>
+                            <div class="col-md-12">
+                                <fieldset>
+                                    <label>性别：</label><input name="sex" type="text" class="form-control" id="sex" placeholder="sex" style="width: 85%" list="choose_sex">
+                                    <datalist id="choose_sex">
+                                        <option value="male">
+                                        <option value="female">
+                                    </datalist>
+                                </fieldset>
+                            </div>
+                            <div class="col-md-12">
+                                <fieldset>
+                                    <label>地区：</label><input name="area" type="text" class="form-control" id="area" placeholder="area" style="width: 85%"/>
+                                </fieldset>
+                            </div>
+                            <div class="col-md-12">
+                                <fieldset>
+                                    <label>电话：</label><input name="phone" type="text" class="form-control" id="phone" placeholder="phone" style="width: 85%"/>
+                                </fieldset>
+                            </div>
+                            <div class="col-md-12">
+                                <fieldset>
+                                    <button type="button" id="form-submit" class="btn">修改信息</button>
+                                </fieldset>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="footer">
+    <div class="content">
+        <p>Copyright &copy; 2018.Company name All rights reserved.</p>
+    </div>
+</div>
+
+
+<script src="../js/vendor/jquery-1.11.2.min.js"></script>
+
+<script src="../js/vendor/bootstrap.min.js"></script>
+
+<script src="../js/datepicker.js"></script>
+<script src="../js/plugins.js"></script>
+<script src="../js/main.js"></script>
+
+<script type="text/javascript">
+    $(document).ready(function() {
+
+
+
+        // navigation click actions
+        $('.scroll-link').on('click', function(event){
+            event.preventDefault();
+            var sectionID = $(this).attr("data-id");
+            scrollToID('#' + sectionID, 750);
+        });
+        // scroll to top action
+        $('.scroll-top').on('click', function(event) {
+            event.preventDefault();
+            $('html, body').animate({scrollTop:0}, 'slow');
+        });
+        // mobile nav toggle
+        $('#nav-toggle').on('click', function (event) {
+            event.preventDefault();
+            $('#main-nav').toggleClass("open");
+        });
+    });
+    // scroll function
+    function scrollToID(id, speed){
+        var offSet = 0;
+        var targetOffset = $(id).offset().top - offSet;
+        var mainNav = $('#main-nav');
+        $('html,body').animate({scrollTop:targetOffset}, speed);
+        if (mainNav.hasClass("open")) {
+            mainNav.css("height", "1px").removeClass("in").addClass("collapse");
+            mainNav.removeClass("open");
+        }
+    }
+    if (typeof console === "undefined") {
+        console = {
+            log: function() { }
+        };
+    }
+
+</script>
+
+<script>
+    //常用函数
+    function getUserName(){
+        var url=window.location.href;
+        var index = url.indexOf("_");
+        var subStr = url.substr(index+1, url.length);
+        return subStr;
+    }
+</script>
+
+<script>
+    $("#logout").click(function () {
+        location.href = '/home';
+    });
+</script>
+
+<script>
+    //初始化Message
+    var username=getUserName();
+    var mess=new Array();
+    var table=document.getElementById("messageTable");
+    $.ajax({
+        type:'POST',
+        url:'/'+username + '/worker/overDue',
+        dataType:"text",
+        success:function (data) {
+            if(data==""){}
+            else{  var mess = new Array();
+                mess = data.split("_");
+                for (var i = 0; i < mess.length; i++) {
+                    var p = document.createElement("p");
+                    p.innerHTML = "任务:<span>" + mess[i] + "</span>已经过期";
+                    table.appendChild(p);
+                }
+            }
+
+        },
+        error:function (data) {
+            alert("获取系统信息失败");
+        }
+    });
+
+    $.ajax({
+        url:'/'+username+'/worker/dayToDDL2',
+        type:'POST',
+        dataType:"text",
+        success:function (data) {
+            if(data==""){}
+            else{  var mess = new Array();
+                mess = data.split("_");
+                for (var i = 0; i < mess.length; i++) {
+                    var p = document.createElement("p");
+                    p.innerHTML = "任务" + mess[i] + "还有两天将过期";
+                    table.appendChild(p);
+                }
+            }
+
+        },
+        error:function (data) {
+
+        }
+    });
+</script>
+
+<script>
+    //我的任务
+    /*
+                        <div class="first-section">
+                            <div class="container-fluid">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="left-content">
+                                            <h2>这里加载任务名</h2>
+                                            <p>这里加载任务要求</p>
+                                            <br><p>这里加载任务进度</p>
+
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="right-image">
+                                            <img src="../img/first_service.jpg" alt="first service">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+    */
+    var my_tasks=document.getElementById("my_tasks");
+    var username=getUserName();
+    $.ajax({
+        type:'GET',
+        url:'/'+username+'/worker/loadAccepted',//url的名字要改一下,返回格式同announcer
+        dataType:"text",
+        success:function (data) {
+            var mess=new Array();
+            mess=data.split('_');
+            for(var i=0;i<mess.length;i++){
+                let obj=eval('('+mess[i]+')');
+                let curTime = new Date();
+                let startTime = new Date(Date.parse(obj.start));
+                let endTime = new Date(Date.parse(obj.end));
+                //if (curTime >= startTime && curTime <= endTime) {
+                    let div1=document.createElement("div");
+                    div1.classList.add("col-md-4");
+                    div1.classList.add("col-sm-6");
+                    let div2=document.createElement("div");
+                    div2.classList.add("item");
+                    let div3=document.createElement("div");
+                    div3.classList.add("thumb");
+                    let a=document.createElement("a");
+                    let div4=document.createElement("div");
+                    div4.classList.add("hover-effect");
+                    var div5=document.createElement("div");
+                    div5.classList.add("hover-content");
+                    let h2=document.createElement("h2");
+                    h2.innerHTML=obj.missionName;
+                    let h5=document.createElement("h5");
+                    h5.innerHTML="开始时间："+obj.start+" <br>结束时间："+obj.end;
+                    let h6=document.createElement("h6");
+                    h6.innerHTML="奖励积分："+obj.points;
+                    div5.appendChild(h2);
+                    div5.appendChild(h5);
+                    div5.appendChild(h6);
+                    div4.appendChild(div5);
+                    a.appendChild(div4);
+                    let div6=document.createElement("div");
+                    div6.classList.add("image");
+                    let img=document.createElement("img");
+                    img.src="data:image/jpg;base64,"+obj.picture;
+                    div1.onclick=function (ev) {
+                        if(obj.way=="框选题") {
+                            location.href = '/' + username + '_draw_' + obj.missionName;
+                        }
+                        else{
+                            location.href = '/' + username + '_tag_' + obj.missionName;
+                        }
+                    };
+                    div6.appendChild(img);
+                    div3.appendChild(a);
+                    div3.appendChild(div6);
+                    div2.appendChild(div3);
+                    div1.appendChild(div2);
+                    my_tasks.appendChild(div1);
+                //}
+            }
+        },
+        error:function (data) {
+            alert("error");
+        }
+    });
+</script>
+
+<script>
+    var all_tasks=document.getElementById("all_tasks");
+    var username=getUserName();
+    var span = document.getElementById("username");
+    span.innerText = username;
+    $.ajax({
+        type:'GET',
+        url:'/'+username+'/worker/loadAllMissions',//url的名字要改一下,返回格式同announcer
+        dataType:"text",
+        success:function (data) {
+            var mess=new Array();
+            mess=data.split('_');
+            for(var i=0;i<mess.length;i++){
+                let obj=eval('('+mess[i]+')');
+                let curTime = new Date();
+                let startTime = new Date(Date.parse(obj.start));
+                let endTime = new Date(Date.parse(obj.end));
+                //if (curTime >= startTime && curTime <= endTime) {
+                    let div1=document.createElement("div");
+                    div1.classList.add("col-md-4");
+                    div1.classList.add("col-sm-6");
+                    let div2=document.createElement("div");
+                    div2.classList.add("item");
+                    let div3=document.createElement("div");
+                    div3.classList.add("thumb");
+                    let a=document.createElement("a");
+                    let div4=document.createElement("div");
+                    div4.classList.add("hover-effect");
+                    let div5=document.createElement("div");
+                    div5.classList.add("hover-content");
+                    let h2=document.createElement("h2");
+                    h2.innerHTML=obj.missionName;
+                    let h5=document.createElement("h5");
+                    h5.innerHTML="开始时间："+obj.start+" <br>结束时间："+obj.end;
+                    let h6=document.createElement("h6");
+                    h6.innerHTML="奖励积分："+obj.points;
+                    let div0 = document.createElement("div");
+                    div0.classList.add("lingqu");
+                    div0.innerHTML = "<a>领取任务</a>";
+                    div5.appendChild(h2);
+                    div5.appendChild(h5);
+                    div5.appendChild(h6);
+                    div5.appendChild(div0);
+                    div4.appendChild(div5);
+                    a.appendChild(div4);
+                    let div6=document.createElement("div");
+                    div6.classList.add("image");
+                    let img=document.createElement("img");
+                    img.src="data:image/jpg;base64,"+obj.picture;
+                    div1.onclick=function (ev) {
+                        $.ajax({
+                            type: 'POST',
+                            url: '/' + username + '/accept/'+obj.missionName,//url的名字要改一下,返回格式同announcer
+                            dataType: "text",
+                            success:function (data) {
+                                if(data == "true")
+                                    alert("选择任务成功");
+                                else
+                                    alert(data);
+                            },
+                            error:function (data) {
+                                alert("选择任务失败");
+                            }
+                        });
+                    };
+                    div6.appendChild(img);
+                    div3.appendChild(a);
+                    div3.appendChild(div6);
+                    div2.appendChild(div3);
+                    div1.appendChild(div2);
+                    all_tasks.appendChild(div1);
+                //}
+            }
+        },
+        error:function (data) {
+            alert("error");
+        }
+    });
+    /*
+                    <div class="col-md-4 col-sm-6">
+                        <div class="item">
+                            <div class="thumb">
+                                <a href="../img/first_big_item.jpg" data-lightbox="image-1">
+                                    <div class="hover-effect">
+                                        <div class="hover-content">
+                                            <h2>这里加载任务名</h2>
+                                            <h5>开始时间：<em></em>结束时间：<em></em></h5>
+                                            <h6>奖励积分：<em></em></h6>
+                                        </div>
+                                    </div>
+                                </a>
+                                <div class="image">
+                                    <img src="../img/first_item.jpg">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+    */
+
+</script>
+<script>
+    //初始化个人信息
+    /*var test='{"username":"worker2", "password":"123456", "points":"0", "sex":"null", "area":"null", "phone":"null", "email":"121@qq.com"}';
+    var obj=eval('('+test+')');
+    var points=obj.points;
+    var username=obj.username;
+    var passwd=obj.password;
+    var email=obj.email;
+    document.contact.email.setAttribute("placeholder",email);
+    document.contact.password.setAttribute("placeholder",passwd);
+    document.contact.name.setAttribute("placeholder",username);
+    document.getElementById("points").innerText="积分累计："+points;
+    */
+    $.ajax({
+    type:'GET',
+    url:'/'+username+'/workerInfo',//tm不会起名字了
+    dataType:"text",
+    success:function (data) {//需要积分，已完成任务数，排名，密码，email，介绍
+        var obj=eval('('+data+')');
+        var points=obj.points;
+        var finishedMissions=obj.numOfFinished;
+        var rank=obj.rank;
+        var passwd=obj.password;
+        var email=obj.email;
+        var area=obj.area;
+        var sex=obj.sex;
+        var phone=obj.phone;
+        if(email=="null"){
+            email="email";
+        }
+        if(area=="null"){
+            area="area";
+        }
+        if(phone=="null"){
+            phone="phone";
+        }
+        if(sex=="null"){
+            sex="sex";
+        }
+        else if(sex=="0") {
+            sex = "male";
+        }
+        else{
+            sex = "female";
+        }
+        //document.contact.name.setAttribute("placeholder",username);
+        document.contact.email.setAttribute("placeholder",email);
+        document.getElementById("ID").innerHTML=getUserName();
+        document.contact.area.setAttribute("placeholder",area);
+        document.contact.phone.setAttribute("placeholder",phone);
+        document.getElementById("points").innerText=points;
+        document.contact.sex.setAttribute("placeholder",sex);
+        document.getElementById("finishedMissions").innerText=finishedMissions;
+        document.getElementById("rank").innerText=rank;
+    },
+    error:function (data) {
+        alert("获取个人信息失败");
+    }
+    });
+</script>
+
+<script>
+    //个人信息
+    $("#form-submit").click(function () {
+        var username = getUserName();
+        var email=document.contact.email.value;
+        var passwd=document.contact.password.value;
+        //var introduction=document.contact.introduction.value;
+        var sex=document.contact.sex.value;
+        var area=document.contact.area.value;
+        var phone=document.contact.phone.value;
+        //var username=document.contact.username.placeholder;
+        if(email==""){
+            email=document.contact.email.placeholder;
+        }
+        while (email.indexOf('.') > 0) {
+            email = email.replace('.', ',');
+        }
+        if(passwd==""){
+            passwd=document.contact.password.placeholder;
+        }
+        /*if(introduction==""){
+            introduction=document.contact.introduction.placeholder;
+        }*/
+        if(sex==""){
+            sex=document.contact.sex.placeholder;
+        }
+        if(area==""){
+            area=document.contact.area.placeholder;
+        }
+        if(phone==""){
+            phone=document.contact.phone.placeholder;
+        }
+        var updateStr = email + '_' + passwd + '_' + sex + '_' + area + '_' + phone;
+        $.ajax({
+            type:'POST',
+            url:'/'+username+'/updateWorkerInfo/'+ updateStr,
+            dataType:"text",
+            success:function (data) {
+                alert("修改成功！");
+            },
+            error:function (data) {
+                alert("error");
+            }
+        });
+    });
+</script>
+<script src="../js/touxiang.js"></script>
+</body>
+</html>

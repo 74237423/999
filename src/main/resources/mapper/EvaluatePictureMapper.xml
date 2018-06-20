@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cts.phase3.persistence.dao.EvaluatePictureDao" >
+    <resultMap id="BaseResultMap" type="cts.phase3.persistence.model.EvaluatePicture" >
+        <id column="id" property="id" jdbcType="INTEGER" />
+        <result column="ename" property="name" jdbcType="VARCHAR" />
+        <result column="rname" property="ratername" jdbcType="VARCHAR" />
+        <result column="mname" property="missionname" jdbcType="VARCHAR" />
+        <result column="state0" property="state" jdbcType="INTEGER" />
+        <result column="isRight" property="isRight" jdbcType="INTEGER" />
+    </resultMap>
+    <sql id="Base_Column_List" >
+        id, ename, rname, mname, state0, isRight
+    </sql>
+    <select id="findEvaluatePictureByRaterAndMission" resultMap="BaseResultMap" >
+        select
+        <include refid="Base_Column_List" />
+        from evaluatepicture
+        where rname = #{ratername,jdbcType=VARCHAR} AND mname = #{missionname,jdbcType=VARCHAR}
+    </select>
+    <delete id="delete" parameterType="java.lang.Integer" >
+        delete from evaluatepicture
+        where id = #{id,jdbcType=INTEGER}
+    </delete>
+    <insert id="insert" parameterType="cts.phase3.persistence.model.EvaluatePicture" >
+        insert into evaluatepicture (ename, rname, mname, state0, isRight)
+        values (#{name,jdbcType=VARCHAR}, #{ratername,jdbcType=VARCHAR}, #{missionname,jdbcType=VARCHAR},
+        #{state,jdbcType=INTEGER}, #{isRight,jdbcType=INTEGER})
+    </insert>
+    <update id="update" parameterType="cts.phase3.persistence.model.EvaluatePicture" >
+        update evaluatepicture
+        set
+        ename = #{name,jdbcType=VARCHAR},
+        rname = #{ratername,jdbcType=VARCHAR},
+        mname = #{missionname,jdbcType=VARCHAR},
+        state0 = #{state,jdbcType=INTEGER},
+        isRight = #{isRight,jdbcType=INTEGER}
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+</mapper>

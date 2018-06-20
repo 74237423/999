@@ -1,0 +1,311 @@
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>管理员主界面</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+
+    <link rel="stylesheet" href="../css/bootstrap.min.css">
+    <link rel="stylesheet" href="../css/bootstrap-theme.min.css">
+    <link rel="stylesheet" href="../css/fontAwesome.css">
+    <link rel="stylesheet" href="../css/light-box.css">
+    <link rel="stylesheet" href="../css/templatemo-main.css">
+
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700,800" rel="stylesheet">
+
+    <script src="../js/vendor/modernizr-2.8.3-respond-1.4.2.min.js"></script>
+</head>
+
+<body>
+
+<div class="sequence">
+
+    <div class="seq-preloader">
+        <svg width="39" height="16" viewBox="0 0 39 16" xmlns="http://www.w3.org/2000/svg" class="seq-preload-indicator"><g fill="#F96D38"><path class="seq-preload-circle seq-preload-circle-1" d="M3.999 12.012c2.209 0 3.999-1.791 3.999-3.999s-1.79-3.999-3.999-3.999-3.999 1.791-3.999 3.999 1.79 3.999 3.999 3.999z"/><path class="seq-preload-circle seq-preload-circle-2" d="M15.996 13.468c3.018 0 5.465-2.447 5.465-5.466 0-3.018-2.447-5.465-5.465-5.465-3.019 0-5.466 2.447-5.466 5.465 0 3.019 2.447 5.466 5.466 5.466z"/><path class="seq-preload-circle seq-preload-circle-3" d="M31.322 15.334c4.049 0 7.332-3.282 7.332-7.332 0-4.049-3.282-7.332-7.332-7.332s-7.332 3.283-7.332 7.332c0 4.05 3.283 7.332 7.332 7.332z"/></g></svg>
+    </div>
+
+</div>
+
+
+<nav style="height: available">
+    <div class="logo">
+        <img src="../img/logo.png" alt="">
+    </div>
+    <div class="mini-logo">
+        <img src="../img/mini_logo.png" alt="">
+    </div>
+    <ul>
+        <li><a href="#1"><em class="fa fa-home"></em> <em>管理员主页</em></a></li>
+        <li><a href="#2"><em class="fa fa-image"></em> <em>总体局势</em></a></li>
+        <li><a href="#3"><em class="fa fa-user"></em> <em>系统用户</em></a></li>
+        <li><a href="#4"><em class="fa fa-pencil"></em> <em>市场任务</em></a></li>
+
+    </ul>
+</nav>
+
+<div class="slides">
+    <div class="slide" id="1">
+        <div class="content first-content">
+            <div class="container-fluid">
+                <div class="col-md-3">
+                    <div class="author-image"><img src="../img/author_image.png" alt=""></div>
+                </div>
+                <div class="col-md-9">
+                    <h2>欢迎使用我们的众包系统</h2>
+                    <p> 在这里您是我们系统的管理员，可以查看系统基本用户数据和众包任务数据，以便维护系统。</p>
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="slide" id="2">
+        <div class="content second-content">
+            <div class="container-fluid">
+                <p style="color: #fff;font-size: 20px;text-align: center;padding: 100px 0 10px 0;">各用户所占比例</p>
+                <div id="ring" style="width:450px;height:164px;margin: 0 auto;"></div>
+
+                <p style="color: #fff;font-size: 20px;text-align: center;padding: 100px 0 10px 0;">前7日发布任务个数</p>
+                <div id="line" style="width:822px;height:492px;"></div>
+                <p style="color: #fff;font-size: 20px;text-align: center;padding: 100px 0 10px 0;">前7日用户登录次数</p>
+                <div id="pillar1" style="width:838px;height:305px;"></div>
+
+                <p style="color: #fff;font-size: 20px;text-align: center;padding: 100px 0 10px 0;">前7日完成任务数</p>
+                <div id="pillar2" style="width:838px;height:305px;"></div>
+
+            </div>
+        </div>
+    </div>
+    <div class="slide" id="3">
+        <div class="content third-content">
+            <div class="container-fluid">
+                <iframe allowtransparency="true" src="users_tables.html" style="background-color:transparent" width="100%" height="500px" frameborder="0"  scrolling="no"></iframe>
+            </div>
+        </div>
+    </div>
+    <div class="slide" id="4">
+        <div class="content fourth-content">
+            <div class="container-fluid">
+                <iframe allowtransparency="true" src="tasks_tables.html" style="background-color:transparent" width="100%" height="500px" frameborder="0"  scrolling="no"></iframe>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<div class="footer">
+    <div class="content">
+        <p>Copyright &copy; 2018.Company name All rights reserved.</p>
+    </div>
+</div>
+
+
+<script src="../js/vendor/jquery-1.11.2.min.js"></script>
+
+<script src="../js/vendor/bootstrap.min.js"></script>
+
+<script src="../js/datepicker.js"></script>
+<script src="../js/plugins.js"></script>
+<script src="../js/main.js"></script>
+
+<script type="text/javascript">
+    $(document).ready(function() {
+
+
+
+        // navigation click actions
+        $('.scroll-link').on('click', function(event){
+            event.preventDefault();
+            var sectionID = $(this).attr("data-id");
+            scrollToID('#' + sectionID, 750);
+        });
+        // scroll to top action
+        $('.scroll-top').on('click', function(event) {
+            event.preventDefault();
+            $('html, body').animate({scrollTop:0}, 'slow');
+        });
+        // mobile nav toggle
+        $('#nav-toggle').on('click', function (event) {
+            event.preventDefault();
+            $('#main-nav').toggleClass("open");
+        });
+    });
+    // scroll function
+    function scrollToID(id, speed){
+        var offSet = 0;
+        var targetOffset = $(id).offset().top - offSet;
+        var mainNav = $('#main-nav');
+        $('html,body').animate({scrollTop:targetOffset}, speed);
+        if (mainNav.hasClass("open")) {
+            mainNav.css("height", "1px").removeClass("in").addClass("collapse");
+            mainNav.removeClass("open");
+        }
+    }
+    if (typeof console === "undefined") {
+        console = {
+            log: function() { }
+        };
+    }
+</script>
+<script type="text/javascript" src="../chart/js/jquery-1.7.2-min.js"></script>
+<script type="text/javascript" src="../chart/js/echarts.min.js"></script>
+<script type="text/javascript" src="../chart/js/index.js"></script>
+<script>
+    var workerper = 0;
+    var announcersper = 93;
+    var raterper=53;
+    $.ajax({
+        type:'GET',
+        url:'/admin/numOfUsers',
+        dataType:"text",
+        success:function (data) {
+
+            let obj=eval('('+data+')');
+            let ann = parseInt(obj.announcers);
+            let wor = parseInt(obj.workers);
+            let ra = parseInt(obj.raters);
+            let sum = ann+wor+ra;
+            workerper=(wor/sum)*100;
+            workerper=workerper.toFixed(2);
+            announcersper=(ann/sum)*100;
+            announcersper=announcersper.toFixed(2);
+            raterper=(ra/sum)*100;
+            raterper=raterper.toFixed(2);
+
+            pieset();
+
+        },
+        error:function (data) {
+            alert("失败");
+        }
+    });
+</script>
+<script>
+
+    var array_finished = new Array();
+
+    $.ajax({
+        type:'GET',
+        url:'/admin/acceptedInfo',
+        dataType:"text",
+        success:function (data) {
+            let obj=eval('('+data+')');
+            let mon = parseInt(obj.mon);
+            let tue = parseInt(obj.tue);
+            let wed = parseInt(obj.wed);
+            let thu = parseInt(obj.thu);
+            let Fri = parseInt(obj.Fri);
+            let sat = parseInt(obj.sat);
+            let sun = parseInt(obj.sun);
+            array_finished[0]=mon;
+            array_finished[1]=tue;
+            array_finished[2]=wed;
+            array_finished[3]=thu;
+            array_finished[4]=Fri;
+            array_finished[5]=sat;
+            array_finished[6]=sun;
+            pillarset2();
+
+        },
+        error:function (data) {
+            alert("获取每日发布任务信息失败");
+        }
+    });
+</script>
+<script>
+    var array_released = new Array();
+    $.ajax({
+        type:'GET',
+        url:'/admin/acceptedInfo',
+        dataType:"text",
+        success:function (data) {
+            let obj=eval('('+data+')');
+            let mon = parseInt(obj.mon);
+            let tue = parseInt(obj.tue);
+            let wed = parseInt(obj.wed);
+            let thu = parseInt(obj.thu);
+            let Fri = parseInt(obj.Fri);
+            let sat = parseInt(obj.sat);
+            let sun = parseInt(obj.sun);
+            array_released[0]=mon;
+            array_released[1]=tue;
+            array_released[2]=wed;
+            array_released[3]=thu;
+            array_released[4]=Fri;
+            array_released[5]=sat;
+            array_released[6]=sun;
+            lineset();
+
+
+        },
+        error:function (data) {
+            alert("获取每日完成任务信息失败");
+        }
+    });
+</script>
+<script>
+    var array_login = new Array();
+    var array_login2 = new Array();
+    var array_login3 = new Array();
+    $.ajax({
+        type:'GET',
+        url:'/admin/usersLoginInfo',
+        dataType:"text",
+        success:function (data) {
+
+            var mess = data.split('_');
+            let obj1=eval('('+mess[0]+')');
+            let mon1 = parseInt(obj1.mon);
+            let tue1 = parseInt(obj1.tue);
+            let wed1 = parseInt(obj1.wed);
+            let thu1 = parseInt(obj1.thu);
+            let Fri1 = parseInt(obj1.Fri);
+            let sat1 = parseInt(obj1.sat);
+            let sun1 = parseInt(obj1.sun);
+            array_login[0]=mon1;
+            array_login[1]=tue1;
+            array_login[2]=wed1;
+            array_login[3]=thu1;
+            array_login[4]=Fri1;
+            array_login[5]=sat1;
+            array_login[6]=sun1;
+            let obj2=eval('('+mess[1]+')');
+            let mon2 = parseInt(obj2.mon);
+            let tue2 = parseInt(obj2.tue);
+            let wed2 = parseInt(obj2.wed);
+            let thu2 = parseInt(obj2.thu);
+            let Fri2 = parseInt(obj2.Fri);
+            let sat2 = parseInt(obj2.sat);
+            let sun2 = parseInt(obj2.sun);
+            array_login2[0]=mon2;
+            array_login2[1]=tue2;
+            array_login2[2]=wed2;
+            array_login2[3]=thu2;
+            array_login2[4]=Fri2;
+            array_login2[5]=sat2;
+            array_login2[6]=sun2;
+            let obj3=eval('('+mess[2]+')');
+            let mon3 = parseInt(obj3.mon);
+            let tue3 = parseInt(obj3.tue);
+            let wed3 = parseInt(obj3.wed);
+            let thu3 = parseInt(obj3.thu);
+            let Fri3 = parseInt(obj3.Fri);
+            let sat3 = parseInt(obj3.sat);
+            let sun3 = parseInt(obj3.sun);
+            array_login3[0]=mon3;
+            array_login3[1]=tue3;
+            array_login3[2]=wed3;
+            array_login3[3]=thu3;
+            array_login3[4]=Fri3;
+            array_login3[5]=sat3;
+            array_login3[6]=sun3;
+            pillarset1();
+        },
+        error:function (data) {
+            alert("获取用户登录信息失败");
+        }
+    });
+</script>
+</body>
+</html>

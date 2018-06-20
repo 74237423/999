@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cts.phase3.persistence.dao.WorkerPictureDao" >
+    <resultMap id="BaseResultMap" type="cts.phase3.persistence.model.WorkerPicture" >
+        <id column="id" property="id" jdbcType="INTEGER" />
+        <result column="picture_name" property="name" jdbcType="VARCHAR" />
+        <result column="wname" property="workername" jdbcType="VARCHAR" />
+        <result column="mname" property="missionname" jdbcType="VARCHAR" />
+        <result column="picture" property="picture" jdbcType="BLOB" />
+        <result column="state0" property="state" jdbcType="INTEGER" />
+        <result column="ptag" property="tag" jdbcType="VARCHAR" />
+    </resultMap>
+    <sql id="Base_Column_List" >
+        id, picture_name, wname, mname, picture, state0, ptag
+    </sql>
+    <select id="findById" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+        select
+        <include refid="Base_Column_List" />
+        from workerpicture
+        where id = #{id,jdbcType=INTEGER}
+    </select>
+    <select id="findByWorkerName" resultMap="BaseResultMap" parameterType="java.lang.String" >
+        select
+        <include refid="Base_Column_List" />
+        from workerpicture
+        where wname = #{workername,jdbcType=VARCHAR}
+    </select>
+    <select id="findByMissionName" resultMap="BaseResultMap" parameterType="java.lang.String" >
+        select
+        <include refid="Base_Column_List" />
+        from workerpicture
+        where mname = #{missionname,jdbcType=VARCHAR}
+    </select>
+    <select id="findByName" resultMap="BaseResultMap" parameterType="java.lang.String" >
+        select
+        <include refid="Base_Column_List" />
+        from workerpicture
+        where picture_name = #{name,jdbcType=VARCHAR}
+    </select>
+    <select id="findByWorkerNameAndMissionName" resultMap="BaseResultMap" >
+        select
+        <include refid="Base_Column_List" />
+        from workerpicture
+        where wname = #{workername,jdbcType=VARCHAR} AND mname = #{missionname,jdbcType=VARCHAR}
+    </select>
+    <select id="allWorkerPicture" resultMap="BaseResultMap" >
+        select
+        <include refid="Base_Column_List" />
+        from workerpicture
+    </select>
+    <delete id="deleteById" parameterType="java.lang.Integer" >
+        delete from workerpicture
+        where id = #{id,jdbcType=INTEGER}
+    </delete>
+    <insert id="insert" parameterType="cts.phase3.persistence.model.WorkerPicture" >
+        insert into workerpicture (picture_name, wname, mname, picture, state0, ptag)
+        values (#{name,jdbcType=VARCHAR}, #{workername,jdbcType=VARCHAR}, #{missionname,jdbcType=VARCHAR}, #{picture,jdbcType=BLOB}, #{state,jdbcType=INTEGER}, #{tag,jdbcType=VARCHAR})
+    </insert>
+    <update id="update" parameterType="cts.phase3.persistence.model.WorkerPicture" >
+        update workerpicture
+        set
+        picture_name = #{name,jdbcType=VARCHAR},
+        wname = #{workername,jdbcType=VARCHAR},
+        mname = #{missionname,jdbcType=VARCHAR},
+        picture = #{picture,jdbcType=BLOB},
+        state0 = #{state,jdbcType=INTEGER},
+        ptag = #{tag,jdbcType=VARCHAR}
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+</mapper>

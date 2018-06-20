@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cts.phase3.persistence.dao.AcceptDao" >
+    <resultMap id="BaseResultMap" type="cts.phase3.persistence.model.Accept" >
+        <id column="id" property="id" jdbcType="INTEGER" />
+        <result column="wname" property="workerName" jdbcType="VARCHAR" />
+        <result column="mname" property="missionName" jdbcType="VARCHAR" />
+        <result column="start_time" property="start" jdbcType="VARCHAR" />
+        <result column="end_time" property="end" jdbcType="VARCHAR" />
+        <result column="isFinished" property="isFinished" jdbcType="INTEGER" />
+        <result column="checkFlag" property="checkFlag" jdbcType="INTEGER" />
+    </resultMap>
+    <sql id="Base_Column_List" >
+        id, wname, mname, start_time, end_time, isFinished, checkFlag
+    </sql>
+    <select id="findById" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+        select
+        <include refid="Base_Column_List" />
+        from accept
+        where id = #{id,jdbcType=INTEGER}
+    </select>
+    <select id="findByMissionName" resultMap="BaseResultMap" parameterType="java.lang.String" >
+        select
+        <include refid="Base_Column_List" />
+        from accept
+        where mname = #{missionName,jdbcType=VARCHAR}
+    </select>
+    <select id="findByWorkerName" resultMap="BaseResultMap" parameterType="java.lang.String" >
+        select
+        <include refid="Base_Column_List" />
+        from accept
+        where wname = #{workerName,jdbcType=VARCHAR}
+    </select>
+    <select id="findByMissionNameAndWorkerName" resultMap="BaseResultMap" >
+        select
+        <include refid="Base_Column_List" />
+        from accept
+        where wname = #{workerName,jdbcType=VARCHAR} and mname = #{missionName, jdbcType=VARCHAR}
+    </select>
+    <select id="allAccept" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List" />
+        from accept
+    </select>
+    <delete id="deleteById" parameterType="java.lang.Integer" >
+        delete from accept
+        where id = #{id,jdbcType=INTEGER}
+    </delete>
+    <insert id="insert" parameterType="cts.phase3.persistence.model.Accept" >
+        insert into accept (wname, mname, start_time, end_time, isFinished, checkFlag)
+        values (#{workerName,jdbcType=VARCHAR}, #{missionName,jdbcType=VARCHAR},
+         #{start,jdbcType=VARCHAR}, #{end,jdbcType=VARCHAR}, #{isFinished,jdbcType=INTEGER}, #{checkFlag,jdbcType=INTEGER})
+    </insert>
+    <update id="update" parameterType="cts.phase3.persistence.model.Accept" >
+        update accept
+        set wname = #{workerName,jdbcType=VARCHAR},
+         mname = #{missionName,jdbcType=VARCHAR},
+         start_time = #{start,jdbcType=VARCHAR},
+         end_time = #{end,jdbcType=VARCHAR},
+         isFinished = #{isFinished,jdbcType=INTEGER},
+         checkFlag = #{checkFlag,jdbcType=INTEGER}
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+</mapper>
