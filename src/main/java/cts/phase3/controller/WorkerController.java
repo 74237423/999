@@ -157,7 +157,7 @@ public class WorkerController {
     @RequestMapping(value = "/loadDrawCanvas/{missionName}/{order}", method = POST)
     @ResponseBody
     public String loadDrawCanvasPicture(@PathVariable("username") String username, @PathVariable("missionName") String missionName,
-                                     @PathVariable("order") String order){
+                                        @PathVariable("order") String order){
         Accept accept = workerService.findByMissionNameAndWorkerName(username, missionName);
         int o = Integer.parseInt(order);
         WorkerPicture workerPicture = workerPictureService.selectWorkerPictureByAccept(accept).get(o);
@@ -176,7 +176,7 @@ public class WorkerController {
     @RequestMapping(value = "/loadDrawBackground/{missionName}/{order}", method = POST)
     @ResponseBody
     public String loadDrawBackgroundPicture(@PathVariable("username") String username, @PathVariable("missionName") String missionName,
-                                     @PathVariable("order") String order){
+                                            @PathVariable("order") String order){
         int o = Integer.parseInt(order);
         MissionPicture workerPicture = missionPictureService.selectMissionPicturesByMission(missionName).get(o);
         byte[] bytes = workerPicture.getPicture();
@@ -195,7 +195,7 @@ public class WorkerController {
     @RequestMapping(value = "/saveDraw/{missionName}/{order}/{pic}", method = POST)
     @ResponseBody
     public boolean saveDrawMissionPicture(@PathVariable("username") String username, @PathVariable("missionName") String missionName,
-                                     @PathVariable("order") String order, @PathVariable("pic") String pic) {
+                                          @PathVariable("order") String order, @PathVariable("pic") String pic) {
         Accept accept = workerService.findByMissionNameAndWorkerName(username, missionName);
         int o = Integer.parseInt(order);
         WorkerPicture workerPicture = workerPictureService.selectWorkerPictureByAccept(accept).get(o);
@@ -297,7 +297,7 @@ public class WorkerController {
     @RequestMapping(value = "/loadTagCanvas/{missionName}/{order}", method = POST)
     @ResponseBody
     public String loadTagCanvasPicture(@PathVariable("username") String username, @PathVariable("missionName") String missionName,
-                                        @PathVariable("order") String order){
+                                       @PathVariable("order") String order){
         Accept accept = workerService.findByMissionNameAndWorkerName(username, missionName);
         int o = Integer.parseInt(order);
         WorkerPicture workerPicture = workerPictureService.selectWorkerPictureByAccept(accept).get(o);
@@ -308,7 +308,7 @@ public class WorkerController {
     @RequestMapping(value = "/loadTagBackground/{missionName}/{order}", method = POST)
     @ResponseBody
     public String loadTagBackgroundPicture(@PathVariable("username") String username, @PathVariable("missionName") String missionName,
-                                            @PathVariable("order") String order){
+                                           @PathVariable("order") String order){
         int o = Integer.parseInt(order);
         MissionPicture workerPicture = missionPictureService.selectMissionPicturesByMission(missionName).get(o);
         byte[] bytes = workerPicture.getPicture();
@@ -319,7 +319,7 @@ public class WorkerController {
     @RequestMapping(value = "/saveTag/{missionName}/{order}/{tag}", method = POST)
     @ResponseBody
     public boolean saveTagMissionPicture(@PathVariable("username") String username, @PathVariable("missionName") String missionName,
-                                          @PathVariable("order") String order, @PathVariable("tag") String tag) {
+                                         @PathVariable("order") String order, @PathVariable("tag") String tag) {
         Accept accept = workerService.findByMissionNameAndWorkerName(username, missionName);
         int o = Integer.parseInt(order);
         WorkerPicture workerPicture = workerPictureService.selectWorkerPictureByAccept(accept).get(o);

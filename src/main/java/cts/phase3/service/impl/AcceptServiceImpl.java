@@ -128,4 +128,9 @@ public class AcceptServiceImpl implements AcceptService {
         }
         return ret;
     }
+
+    @Override
+    public List<Accept> getAcceptByMissionName(String missionName) {
+        return null;
+    }
 }
