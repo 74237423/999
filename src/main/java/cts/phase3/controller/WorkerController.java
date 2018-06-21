@@ -281,7 +281,7 @@ public class WorkerController {
         mission.setNeeds(1);
         mission.setWay(workerMission.getWay());
         mission.setPoints(workerMission.getPoints());
-        mission.setStart(workerMission.getEnd());
+        mission.setStart(workerMission.getStart());
 
         String startTime = workerMission.getStart();
         String endTime = workerMission.getEnd();
@@ -402,7 +402,7 @@ public class WorkerController {
         mission.setNeeds(1);
         mission.setWay(workerMission.getWay());
         mission.setPoints(workerMission.getPoints());
-        mission.setStart(workerMission.getEnd());
+        mission.setStart(workerMission.getStart());
 
         String startTime = workerMission.getStart();
         String endTime = workerMission.getEnd();
