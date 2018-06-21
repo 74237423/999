@@ -161,26 +161,26 @@
                 var mess=new Array();
                 mess=data.split('_');
                 for(var i=0;i<mess.length;i++){
-                    var obj=eval('('+mess[i]+')');
-                    var li=document.createElement("li");
-                    var url=obj.picture;
+                    let obj=eval('('+mess[i]+')');
+                    let li=document.createElement("li");
+                    let url=obj.picture;
                     url="data:image/jpg;base64,"+url;
-                    var img=document.createElement("img");
+                    let img=document.createElement("img");
                     img.src=url;
-                    var a1=document.createElement("a");
+                    let a1=document.createElement("a");
                     a1.classList.add("a1");
-                    var div=document.createElement("div");
+                    let div=document.createElement("div");
                     div.classList.add("divA");
-                    var p1=document.createElement("p");
+                    let p1=document.createElement("p");
                     p1.innerHTML="任务名："+obj.missionName;
                     p1.classList.add("p1");
-                    var p2=document.createElement("p");
+                    let p2=document.createElement("p");
                     p2.innerHTML="任务要求："+obj.description;
                     p2.classList.add("p2");
-                    var p3=document.createElement("p");
+                    let p3=document.createElement("p");
                     p3.innerHTML="积分：";
                     p3.classList.add("p3");
-                    var span1=document.createElement("span");
+                    let span1=document.createElement("span");
                     span1.innerHTML=obj.points;
                     p3.appendChild(span1);
                     div.appendChild(p1);
@@ -188,22 +188,25 @@
                     div.appendChild(p3);
                     a1.appendChild(img);
                     a1.appendChild(div);
-                    var a2=document.createElement("a");
+                    let a2=document.createElement("a");
                     a2.classList.add("a2");
-                    var p4=document.createElement("p");
+                    let p4=document.createElement("p");
                     p4.classList.add("p4");
                     p4.innerHTML="任务名："+obj.missionName;
-                    var p5=document.createElement("p");
+                    let p5=document.createElement("p");
                     p5.classList.add("p5");
                     p5.innerHTML="任务要求："+obj.description;
-                    var p6=document.createElement("p");
+                    let p6=document.createElement("p");
                     p6.classList.add("p6");
                     p6.innerHTML="所需人数：";
-                    var span2=document.createElement("span");
+                    let span2=document.createElement("span");
                     span2.innerHTML=obj.needs;
-                    var p7=document.createElement("p");
+                    let p7=document.createElement("p");
                     p7.classList.add("p7");
                     p7.innerHTML="查看详情";
+                    li.onclick=function (ev) {
+                        location.href='/boss_'+username+'_tasks_data_'+obj.missionName;
+                    };
                     p6.appendChild(span2);
                     a2.appendChild(p4);
                     a2.appendChild(p5);
@@ -212,9 +215,9 @@
                     li.appendChild(a1);
                     li.appendChild(a2);
 
-                    var curTime = new Date();
-                    var startTime = new Date(Date.parse(obj.start));
-                    var endTime = new Date(Date.parse(obj.end));
+                    let curTime = new Date();
+                    let startTime = new Date(Date.parse(obj.start));
+                    let endTime = new Date(Date.parse(obj.end));
                     if (curTime >= startTime && curTime <= endTime) {
                         ul1.appendChild(li);
                     }

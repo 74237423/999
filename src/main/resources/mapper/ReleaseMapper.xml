@@ -50,12 +50,12 @@
         values (#{announcerName,jdbcType=VARCHAR}, #{missionName,jdbcType=VARCHAR},
         #{start,jdbcType=VARCHAR}, #{end,jdbcType=VARCHAR}, #{checkFlag,jdbcType=INTEGER})
     </insert>
-    <update id="updateByPrimaryKey" parameterType="cts.phase3.persistence.model.Release" >
+    <update id="update" parameterType="cts.phase3.persistence.model.Release" >
         update release0
         set  aname = #{announcerName,jdbcType=VARCHAR},
         mname = #{missionName,jdbcType=VARCHAR},
         start_time = #{start,jdbcType=VARCHAR},
-        end_time = #{end_time,jdbcType=VARCHAR},
+        end_time = #{end,jdbcType=VARCHAR},
         checkFlag = #{checkFlag,jdbcType=INTEGER}
         where id = #{id,jdbcType=INTEGER}
     </update>

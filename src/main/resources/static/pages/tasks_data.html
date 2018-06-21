@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <title></title>
     <link rel="stylesheet" href="../css/tablestyle.css" type="text/css">
+    <script src="../js/jquery.min.js" type="text/javascript"></script>
+    <script src="../js/swiper-3.4.0.jquery.min.js" type="text/javascript"></script>
 </head>
 <style>
     span a{
@@ -45,14 +47,18 @@
     <span><a >back</a></span>
     <table class="zebra">
         <caption>完成信息</caption>
-        <thead>
+        <thead id="tasks_table">
         <tr>
+            <th>任务名</th>
             <th>工人</th>
-            <th>正确率</th>
             <th>工人获得积分</th>
-            <th>审评员</th>
-            <th>审评员获得积分</th>
-            <th>操作</th>
+            <th>开始时间</th>
+            <th>结束时间</th>
+            <th>题型</th>
+            <th>内容类型</th>
+            <th>任务要求</th>
+            <th>难度</th>
+            <th>任务状态</th>
         </tr>
         <tbody id="tbMain"></tbody>
     </table>
@@ -64,40 +70,101 @@
         {worker:'N',percent:'60%',point1:60,estimate:'B',point2:2},
         {worker:'T',percent:'70%',point1:70,estimate:'B',point2:2}
     ];
-    function getDataRow(h){
-        var row = document.createElement('tr'); //创建行
+    function getUserName(){
+        var url=window.location.href;
+        var index = url.indexOf("_");
+        var subStr = url.substr(index+1, url.length);
+        index=subStr.indexOf("_");
+        subStr=subStr.substr(0,index);
 
-        var Cell1 = document.createElement('td'); //创建第一列
-        Cell1.innerHTML = h.worker; //填充数据
+        return subStr;
+    }
+    function getMissionName(){
+        var url=window.location.href;
+        var index = url.indexOf("_");
+        var subStr = url.substr(index+1, url.length);
+        index=subStr.indexOf("_");
+        subStr = subStr.substr(index+1, subStr.length);
+        index=subStr.indexOf("_");
+        subStr = subStr.substr(index+1, subStr.length);
+        index=subStr.indexOf("_");
+        subStr = subStr.substr(index+1, subStr.length);
+        return subStr;
+    }
+
+    function getDataRow(h){
+        let row = document.createElement('tr'); //创建行
+
+        let Cell1 = document.createElement('td'); //创建第一列
+        Cell1.innerHTML = h.missionName; //填充数据
         row.appendChild(Cell1);
-        var Cell2 = document.createElement('td');
-        Cell2.innerHTML = h.percent; //填充数据
+        let Cell2 = document.createElement('td');
+        Cell2.innerHTML = h.workerName; //填充数据
         row.appendChild(Cell2);
-        var Cell3 = document.createElement('td');
-        Cell3.innerHTML = h.point1; //填充数据
+        let Cell3 = document.createElement('td');
+        Cell3.innerHTML = h.points; //填充数据
         row.appendChild(Cell3);
         var Cell4 = document.createElement('td');
-        Cell4.innerHTML = h.estimate; //填充数据
+        Cell4.innerHTML = h.start; //填充数据
         row.appendChild(Cell4);
-        var Cell5 = document.createElement('td');
-        Cell5.innerHTML = h.point2; //填充数据
+        let Cell5 = document.createElement('td');
+        Cell5.innerHTML = h.end; //填充数据
         row.appendChild(Cell5);
-        var Cell6 = document.createElement('td');
-        Cell6.innerHTML = "<a>查看具体任务完成情况</a>"; //填充数据
-        row.appendChild(Cell6); //监听添加跳转@沈嘉伟
+        let Cell6 = document.createElement('td');
+        Cell6.innerHTML = h.way; //填充数据
+        row.appendChild(Cell6);
+        let Cell7 = document.createElement('td');
+        Cell7.innerHTML = h.type; //填充数据
+        row.appendChild(Cell7);
+        let Cell8 = document.createElement('td');
+        Cell8.innerHTML = h.description; //填充数据
+        row.appendChild(Cell8);
+        let Cell9 = document.createElement('td');
+        Cell9.innerHTML = h.difficulty; //填充数据
+        row.appendChild(Cell9);
+        let Cell10 = document.createElement('td');
+        Cell10.innerHTML = h.isFinished; //填充数据
+        row.appendChild(Cell10);
+        let Cell11 = document.createElement('td');
+        Cell11.innerHTML = "<a>查看具体任务完成情况</a>"; //填充数据
+        Cell11.onclick=function (ev) {
+            if(h.way=="框选题"){
+                location.href="boss_check_draw";
+            }
+            else{
+                location.href="boss_check_tag";
+            }
+        }
+        row.appendChild(Cell6);
         return row;
     }
+    var username=getUserName();
+    alert(getMissionName());
     window.onload = function(){
-        var tbody = document.getElementById('tbMain');
-
-        for(var i = 0;i < per.length; i++){ //遍历一下json数据
-            var trow = getDataRow(per[i]); //定义一个方法,返回tr数据
-            tbody.appendChild(trow);
-        }
-
+        $.ajax({
+            type:'GET',
+            url:'/'+username + '/viewAllAccepts',
+            dataType:"text",
+            success:function (data) {
+                alert(data);
+                var mess=new Array();
+                mess=data.split("_");
+                for(var i=0;i<mess.length;i++){
+                    let obj=eval('('+mess[i]+')');
+                    if(obj.missionName==getMissionName()) {
+                        let tr = getDataRow(obj);
+                        document.getElementById("tasks_table").appendChild(tr);
+                    }
+                }
+            },
+            error:function (data) {
+                alert("获取任务失败");
+            }
+        });
     }
 
-
 </script>
+
+
 </body>
 </html>

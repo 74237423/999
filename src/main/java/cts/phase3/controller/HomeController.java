@@ -83,7 +83,10 @@ public class HomeController {
                 return "pages/first_home.html";
         }
         else if(str.length == 5){
-            if(str[1].equals("draw"))
+            if(str[2].equals("tasks")&&str[3].equals("data")){
+                return "pages/tasks_data.html";
+            }
+            else if(str[1].equals("draw"))
                 return "pages/estimate_draw.html";
             else if(str[1].equals("tag"))
                 return "pages/estimate_tag.html";
