@@ -155,11 +155,19 @@ public class WorkerController {
     @ResponseBody
     public String loadAllMissions(@PathVariable("username") String username){
         List<Mission> allMissions = missionService.allMission();
-        List<Mission> missions = new ArrayList<>();
+        WorkQualityController workQualityController = new WorkQualityController();
+        List<Mission> missions = workQualityController.recommend(username, workerService);
         for(int i = 0; i < allMissions.size(); i++){
             Mission mission = allMissions.get(i);
-            if(!mission.getName().contains("_"))
-                missions.add(mission);
+            if(!mission.getName().contains("_")) {
+                boolean isD = false;
+                for(int j = 0; j < missions.size(); j++) {
+                    if(mission.getName().equals(missions.get(j).getName()))
+                        isD = true;
+                }
+                if(!isD)
+                    missions.add(mission);
+            }
         }
         MissionUtil missionUtil = new MissionUtil();
         return missionUtil.missionsToStr(missions, missionPictureService);
@@ -211,6 +219,8 @@ public class WorkerController {
     public int loadDrawResult(@PathVariable("username") String username, @PathVariable("missionName") String missionName,
                                         @PathVariable("order") String order){
         Accept accept = workerService.findByMissionNameAndWorkerName(username, missionName);
+        if(accept.getIsFinished() == 0)
+            return 3;
         int o = Integer.parseInt(order);
         WorkerPicture workerPicture = workerPictureService.selectWorkerPictureByAccept(accept).get(o);
         String evaluateMissionName = username + "_" + missionName;
@@ -491,66 +501,28 @@ public class WorkerController {
             WorkerPicture workerPicture = workerPictures.get(i);
             String xyStr = workerPicture.getName();
             System.out.println(xyStr);
-            if(xyStr.split(",").length == 7){
-                String[] rects = xyStr.split("_");
-                for(int j = 0; j < rects.length; j++){
-                    String xlStr = rects[j].split(",")[0].split(":")[1];
-                    String ylStr = rects[j].split(",")[1].split(":")[1];
-                    String xrStr = rects[j].split(",")[2].split(":")[1];
-                    String yrStr = rects[j].split(",")[3].split(":")[1];
-                    int xl = Integer.parseInt(xlStr);
-                    int yl = Integer.parseInt(ylStr);
-                    int xr = Integer.parseInt(xrStr);
-                    int yr = Integer.parseInt(yrStr);
-                    double[] one = {xl, yl};
-                    double[] two = {xr, yr};
-                    list.add(one);
-                    list.add(two);
-                    System.out.println(xlStr + " " + ylStr);
-                }
+            if(xyStr.split(",").length == 4){
+                String rect = xyStr;
+                String xlStr = rect.split(",")[0].split(":")[1];
+                String ylStr = rect.split(",")[1].split(":")[1];
+                String xrStr = rect.split(",")[2].split(":")[1];
+                String yrStr = rect.split(",")[3].split(":")[1];
+                int xl = Integer.parseInt(xlStr);
+                int yl = Integer.parseInt(ylStr);
+                int xr = Integer.parseInt(xrStr);
+                int yr = Integer.parseInt(yrStr);
+                double[] one = {xl, yl};
+                double[] two = {xr, yr};
+                list.add(one);
+                list.add(two);
+                System.out.println(xlStr + " " + ylStr);
             }
         }
 
         ClusteringUtil clusteringUtil = new ClusteringUtil();
-        /*double[] one = {4, 4};
-        double[] two = {64, 64};
-        double[] three = {108, 467};
-        double[] four = {789, 900};
-        list.add(one);
-        list.add(two);
-        list.add(three);
-        list.add(four);
-
-        one[0] = 3;
-        one[1] = 4;
-        two[0] = 60;
-        two[1] = 64;
-        three[0] = 98;
-        three[1] = 467;
-        four[0] = 803;
-        four[1] = 900;
-        list.add(one);
-        list.add(two);
-        list.add(three);
-        list.add(four);
-
-        one[0] = 3;
-        one[1] = 8;
-        two[0] = 60;
-        two[1] = 74;
-        three[0] = 98;
-        three[1] = 487;
-        four[0] = 803;
-        four[1] = 910;
-        list.add(one);
-        list.add(two);
-        list.add(three);
-        list.add(four);*/
-
         clusteringUtil.setDataSet(list);
         List<double[]> xys = clusteringUtil.center();
-        String s = "xl:" + xys.get(0)[0] + ",yl:" + xys.get(0)[1] + ",xr:" + xys.get(1)[0] + ",yr:" + xys.get(1)[1]
-                + "_xl:" + xys.get(2)[0] + ",yl:" + xys.get(2)[1] + ",xr:" + xys.get(3)[0] + ",yr:" + xys.get(3)[1];
+        String s = "xl:" + xys.get(0)[0] + ",yl:" + xys.get(0)[1] + ",xr:" + xys.get(1)[0] + ",yr:" + xys.get(1)[1];
         missionPicture.setName(s);
         missionPictureService.updateMissionPicture(missionPicture);
         System.out.println(s);
