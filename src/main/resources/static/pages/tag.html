@@ -134,7 +134,6 @@
         }
 
         tagStr=tagStr.substr(0,tagStr.length-1);
-        alert(index);
         $.ajax({
             type:'POST',
             url:'/' + username + '/saveTag/' + mission_name + '/' + index+'/'+tagStr,

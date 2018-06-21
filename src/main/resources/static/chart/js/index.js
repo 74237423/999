@@ -210,7 +210,6 @@ function pillarset1() {
             }
         ]
     }) ;
-alert("success");
 }
 
 
