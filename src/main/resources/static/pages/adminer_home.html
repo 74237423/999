@@ -171,11 +171,11 @@
             let ra = parseInt(obj.raters);
             let sum = ann+wor+ra;
             workerper=(wor/sum)*100;
-            workerper=workerper.toFixed(2);
+            workerper=parseInt(workerper.toFixed(2));
             announcersper=(ann/sum)*100;
-            announcersper=announcersper.toFixed(2);
+            announcersper=parseInt(announcersper.toFixed(2));
             raterper=(ra/sum)*100;
-            raterper=raterper.toFixed(2);
+            raterper=parseInt(raterper.toFixed(2));
 
             pieset();
 
