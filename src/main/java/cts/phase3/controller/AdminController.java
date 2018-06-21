@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 
 import javax.annotation.Resource;
+import java.util.Base64;
 import java.util.List;
 
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
@@ -36,6 +37,15 @@ public class AdminController {
 
     @Resource
     private WeeklyLoginService weeklyLoginService;
+
+    @Resource
+    private AcceptService acceptService;
+
+    @Resource
+    private ReleaseService releaseService;
+
+    @Resource
+    private EvaluateService evaluateService;
 
     @ResponseBody
     @RequestMapping(value = "/announcerInfo", method = GET)
@@ -98,7 +108,34 @@ public class AdminController {
     public String allMissions(){
         List<Mission> missions = missionService.allMission();
         MissionUtil missionUtil = new MissionUtil();
-        return missionUtil.missionsToStr(missions, missionPictureService);
+        String s =  missionUtil.missionsToStr(missions, missionPictureService);
+
+        String result = "";
+        for(int i = 0; i < missions.size(); i++){
+            Mission mission = missions.get(i);
+            String start = mission.getStart();
+            start = start.substring(0, 4) + "-" + start.substring(4, 6) + "-" + start.substring(6);
+            String end = mission.getEnd();
+            end = end.substring(0, 4) + "-" + end.substring(4, 6) + "-" + end.substring(6);
+
+            String missionName = "";
+            if(mission.getName().contains("_")){
+                missionName = mission.getName().replaceAll("_", "-");
+            }
+            else {
+                missionName = mission.getName();
+            }
+
+            result += "{\"missionName\":\"" + missionName + "\", \"start\":\"" + start + "\", \"end\":\"" + end
+                    + "\", \"points\":\"" + mission.getPoints() + "\", \"needs\":\"" + mission.getNeeds()
+                    + "\", \"description\":\"" + mission.getDescription() + "\", \"type\":\"" + mission.getType()
+                    + "\", \"way\":\"" + mission.getWay() + "\", \"difficultyClass\":\"" + mission.getDifficultyClass()
+                    + "\", \"accepts\":\"" + mission.getAccepts() + "\"}";
+            if(i != missions.size() - 1)
+                result += "_";
+        }
+        System.out.println(result);
+        return result;
     }
 
     @RequestMapping(value = "/numOfUsers", method = GET)
