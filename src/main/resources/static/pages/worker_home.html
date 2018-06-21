@@ -119,7 +119,7 @@
                         <div  style="border:0;color: #FDFDFD" ><div class="con4">
                             <canvas id="cvs" width="120" height="120"></canvas>
                             <span class="btn upload">上传头像<input type="file" class="upload_pic" id="upload" /></span>
-                        </div><h4>ID:<em id="ID"></em></h4><h4>积分累计：<em id="points"></em></h4><h4>已完成任务数：<em id="finishedMissions"></em></h4><h4>排名：<em id="rank"></em></h4></div>
+                        </div><h4>ID:<em id="ID"></em></h4><h4>积分累计：<em id="points"></em></h4><h4>已完成任务数：<em id="finishedMissions"></em></h4><h4>准确率：<em id="rate"></em></h4><h4>排名：<em id="rank"></em></h4></div>
                     </div>
                 </div>
                 <div class="col-md-6" style="text-align : left;color:#66afe9;font-size:13px">
@@ -504,6 +504,7 @@
         var area=obj.area;
         var sex=obj.sex;
         var phone=obj.phone;
+        var rate = obj.rate;
         if(email=="null"){
             email="email";
         }
@@ -531,6 +532,7 @@
         document.contact.sex.setAttribute("placeholder",sex);
         document.getElementById("finishedMissions").innerText=finishedMissions;
         document.getElementById("rank").innerText=rank;
+        document.getElementById("rate").innerText=rate;
     },
     error:function (data) {
         alert("获取个人信息失败");

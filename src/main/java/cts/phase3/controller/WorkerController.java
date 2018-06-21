@@ -91,10 +91,38 @@ public class WorkerController {
         }
         WorkQualityController workQualityController = new WorkQualityController();
         int rank = workQualityController.ranking(worker.getUsername(), workerService);
+
+        List<Evaluate> evaluates = new ArrayList<>();
+        for(int i = 0; i < accepts.size(); i++){
+            Accept accept = accepts.get(i);
+            String missinName = accept.getWorkerName() + "_" + accept.getMissionName();
+            Evaluate evaluate = evaluateService.getEvaluateByMission(missinName);
+            if(evaluate != null)
+                evaluates.add(evaluate);
+        }
+        int total = 0;
+        int totalR = 0;
+        for(int i = 0; i < evaluates.size(); i++){
+            Evaluate evaluate = evaluates.get(i);
+            System.out.println(evaluate.getRaterName() + " " + evaluate.getMissionName());
+            List<EvaluatePicture> evaluatePictures =
+                    evaluatePictureService.selectEvaluatePictureByRaterAndMission(evaluate.getRaterName(), evaluate.getMissionName().split("_")[1]);
+            for(int j = 0; j < evaluatePictures.size(); j++){
+                total++;
+                if(evaluatePictures.get(j).getIsRight() == 1)
+                    totalR++;
+            }
+        }
+        System.out.println(total);
+        System.out.println(totalR);
+        double rate = (totalR * 1.0)/ total;
+        System.out.println(rate);
+        String a = String.format("%.2f", rate);
+        System.out.println(a);
         String result = "{\"username\":\"" + worker.getUsername() + "\", \"password\":\"" + worker.getPassword()
                 + "\", \"points\":\"" + worker.getPoints() + "\", \"sex\":\"" + worker.getSex() + "\", \"area\":\""
                 + worker.getArea() + "\", \"phone\":\"" + worker.getPhone() + "\", \"email\":\"" + worker.getEmail()
-                + "\", \"numOfFinished\":\"" + numOfFinished + "\", \"rank\":\"" + rank +  "\"}";
+                + "\", \"numOfFinished\":\"" + numOfFinished + "\", \"rank\":\"" + rank + "\", \"rate\":\"" + a +  "\"}";
         return result;
     }
 
@@ -189,7 +217,7 @@ public class WorkerController {
         Evaluate evaluate = evaluateService.getEvaluateByMission(evaluateMissionName);
         if (evaluate.getState() == 0)
             return 2;
-        EvaluatePicture evaluatePicture = evaluatePictureService.selectEvaluatePictureByRaterAndMission(evaluate.getRaterName(), evaluate.getMissionName()).get(o);
+        EvaluatePicture evaluatePicture = evaluatePictureService.selectEvaluatePictureByRaterAndMission(evaluate.getRaterName(), evaluate.getMissionName().split("_")[1]).get(o);
         return evaluatePicture.getIsRight();
     }
 
