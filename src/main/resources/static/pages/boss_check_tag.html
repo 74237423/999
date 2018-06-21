@@ -131,9 +131,6 @@
 
         });
     });
-    function back() {
-        window.history.go(-1);
-    }
     function loadImage(str) {
         var img=new Image();
         img.src=str;
@@ -180,6 +177,11 @@
         index=subStr.indexOf("_");
         subStr=subStr.substr(0,index);
         return subStr;
+    }
+
+    function back() {
+        alert('/boss_'+getUsername()+'_tasks_data_'+getMissionName());
+        location.href='/boss_'+getUsername()+'_tasks_data_'+getMissionName();
     }
 </script>
 <script>

@@ -6,6 +6,8 @@
     <link rel="stylesheet" href="../css/tablestyle.css" type="text/css">
     <script src="../js/jquery.min.js" type="text/javascript"></script>
     <script src="../js/swiper-3.4.0.jquery.min.js" type="text/javascript"></script>
+    <script src="../js/main.js"></script>
+    <script type="text/javascript" src="../js/jquery.min.js"></script>
 </head>
 <style>
     span a{
@@ -44,7 +46,7 @@
 <body>
 <div>
 
-    <span><a >back</a></span>
+    <span><a onclick="back()">back</a></span>
     <table class="zebra">
         <caption>完成信息</caption>
         <thead id="tasks_table">
@@ -66,11 +68,15 @@
 </div>
 <script>
     //模拟一段JSON数据，实际要从数据库中读取
-    var per = [
+    /*var per = [
         {worker:'A',percent:'90%',point1:90,estimate:'B',point2:2},
         {worker:'N',percent:'60%',point1:60,estimate:'B',point2:2},
         {worker:'T',percent:'70%',point1:70,estimate:'B',point2:2}
     ];
+    */
+    function back() {
+        window.history.go(-1);
+    }
     function getUserName(){
         var url=window.location.href;
         var index = url.indexOf("_");
@@ -136,10 +142,10 @@
         row.appendChild(Cell11);
         Cell11.onclick=function (ev) {
             if(h.way=="标注题"){
-                location.href="/boss_"+username+"_boss_check_tag_"+h.workerName+'_'+getMissionName();
+                window.parent.location.href="/boss_"+username+"_boss_check_tag_"+h.workerName+'_'+getMissionName();
             }
             else{
-                location.href="/boss_"+username+"_boss_check_draw_"+h.workerName+'_'+getMissionName();
+                window.parent.location.href="/boss_"+username+"_boss_check_draw_"+h.workerName+'_'+getMissionName();
             }
         }
         return row;
