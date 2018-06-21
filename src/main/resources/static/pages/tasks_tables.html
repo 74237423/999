@@ -99,6 +99,7 @@
                         <thead>
                         <tr>
                             <th>任务名称</th>
+                            <th>任务属性</th>
                             <th>任务类型</th>
                             <th>开始时间</th>
                             <th>结束时间</th>
@@ -168,6 +169,14 @@
         var nameCell = document.createElement('td');//创建第二列name
         nameCell.innerHTML = h.missionName;
         row.appendChild(nameCell);
+        var cateCell = document.createElement('td');//创建第二列name
+        if(h.missionName.indexOf('-')>=0){
+            cateCell.innerHTML="工人任务";
+        }
+        else{
+            cateCell.innerHTML="原始任务";
+        }
+        row.appendChild(cateCell);
         var typeCell = document.createElement('td');//创建第三列type
         typeCell.innerHTML = h.way;
         row.appendChild(typeCell);
