@@ -198,7 +198,12 @@
             pCell.innerHTML = h.points;
             row.appendChild(pCell);
             var sexCell = document.createElement('td');//创建第四列sex
-            sexCell.innerHTML = h.sex;
+            if(h.sex=="1"){
+                sexCell.innerHTML = "男";
+            }
+            else{
+                sexCell.innerHTML = "女";
+            }
             row.appendChild(sexCell);
             var areaCell = document.createElement('td');//创建第五列area
             areaCell.innerHTML = h.area;
