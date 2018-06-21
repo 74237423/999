@@ -42,11 +42,7 @@
         </div>
         <ul class="navMenu">
             <li><a href="javascript:;" class="afinve"> <em class="icon_1"></em> <span>任务细分列表</span> <span class="arrow"></span></a>
-                <ul class="sub-menu">
-                    <li><a href="javascript:;"><span>图片1</span></a></li>
-                    <li><a href="javascript:;"><span>图片2</span></a></li>
-                    <li><a href="javascript:;"><span>图片3</span></a></li>
-                    <li><a href="javascript:;"><span>图片4</span></a></li>
+                <ul class="sub-menu" id="picture_list">
                 </ul>
             </li>
             <li>
@@ -58,9 +54,9 @@
 
 
 <div style="position: absolute;top: 0;left:230px">
-    <p>加载任务</p>
+    <p id="requirements">加载任务</p>
     <h4>审批结果</h4>
-    <div class="picture" style="height:530px;width:1090px;background:url(../img/first_bg.jpg) no-repeat center"></div>
+    <div class="picture" style="height:530px;width:1090px;background:url(../img/first_bg.jpg) no-repeat center" id="bp"></div>
     <div class="tagBox">
         <div class="tagCon clearfix" id="tagcon">
 
@@ -78,16 +74,13 @@
 
     function $(id){ return document.getElementById(id) }//$获取元素函数封装
     function crele(ele){ return document.createElement(ele); } //创建元素
-    function adson(father,son1,son3,clas1,clas2,clas4,con1,con2){
+    function adson(father,son1,clas1,clas2,con1){
         father.appendChild(son1);
 
-        father.appendChild(son3);
         father.className = clas1;
         son1.className = clas2;
 
-        son3.className = clas4;
         son1.innerHTML = con1;
-        son3.innerHTML = con2;
     }
     //输入框聚焦和失焦的效果
     intxt.onfocus = function(){
@@ -100,14 +93,15 @@
     function addTag(tag) {
             var newdiv = crele("div");
             var newem = crele("em");
-
-            var newa = crele("a");
+            newdiv.classList.add("tag");
+            newem.classList.add("tagtxt");
+            newem.innerHTML=tag;
+            newdiv.appendChild(newem);
             if(divs.length == 0){//最新添加的标签在最前边
                 tagcon.appendChild(newdiv);
             }else{
                 tagcon.insertBefore(newdiv,divs[0])
             }
-            adson(newdiv,newem,newa,"tag","tagtxt","closetag",tag,"");
         //console.log(links.length);
     }
 </script>
@@ -140,7 +134,166 @@
     function back() {
         window.history.go(-1);
     }
-</script>
+    function loadImage(str) {
+        var img=new Image();
+        img.src=str;
+        var div=document.getElementById("picture");
+        div.style="height:"+img.height+"px;width:"+img.width+"px;background:url("+str+") no-repeat center";
+    }
+    function getUsername() {
+        var url=window.location.href;
+        var index = url.indexOf("_");
+        var subStr = url.substr(index+1, url.length);
+        index=subStr.indexOf("_");
+        subStr=subStr.substr(0,index);
 
+        return subStr;
+    }
+    function getMissionName() {
+        var url=window.location.href;
+        var index = url.indexOf("_");
+        var subStr = url.substr(index+1, url.length);
+        index=subStr.indexOf("_");
+        subStr = subStr.substr(index+1, subStr.length);
+        index=subStr.indexOf("_");
+        subStr = subStr.substr(index+1, subStr.length);
+        index=subStr.indexOf("_");
+        subStr = subStr.substr(index+1, subStr.length);
+        index=subStr.indexOf("_");
+        subStr = subStr.substr(index+1, subStr.length);
+        index=subStr.indexOf("_");
+        subStr = subStr.substr(index+1, subStr.length);
+        return subStr;
+    }
+    function getWorkerName() {
+        var url=window.location.href;
+        var index = url.indexOf("_");
+        var subStr = url.substr(index+1, url.length);
+        index=subStr.indexOf("_");
+        subStr = subStr.substr(index+1, subStr.length);
+        index=subStr.indexOf("_");
+        subStr = subStr.substr(index+1, subStr.length);
+        index=subStr.indexOf("_");
+        subStr = subStr.substr(index+1, subStr.length);
+        index=subStr.indexOf("_");
+        subStr = subStr.substr(index+1, subStr.length);
+        index=subStr.indexOf("_");
+        subStr=subStr.substr(0,index);
+        return subStr;
+    }
+</script>
+<script>
+    function picture_ajax(user, mission, i) {
+        $.ajax({
+            type:'POST',
+            url:'/' + user + '/loadTagBackground/' + mission + '/' + i,
+            dataType:'text',
+            success:function (data) {
+                var Url="data:image/jpg;base64,"+data;
+                var Ima=new Image();
+                Ima.src=Url;
+                var div=document.getElementById("bp");
+                div.style="height:"+Ima.height+"px;width:"+Ima.width+"px;background:url("+Url+") no-repeat center";
+
+            },
+            error:function (data) {
+                alert("图片加载失败");
+            }
+        });
+
+    }
+</script>
+<script>
+    var username = getUsername();
+    var mission_name = getMissionName();
+    var worker=getWorkerName();
+    var picture_list=document.getElementById("picture_list");
+    var index=0;
+    var name=worker+'_'+mission_name;
+    //alert(mission_name);
+    /*
+    <li><a href="javascript:;"><span>图片1</span></a></li>
+     */
+    $.ajax({
+        type:'POST',
+        url:'/' + worker + '/loadTag/' +mission_name,
+        dataType:'text',
+        success:function (data) {
+            var num=data;
+            for(let i=0;i<num;i++){
+                let li=document.createElement("li");
+                li.classList.add("afinve");
+                let a=document.createElement("a");
+                a.href="javascript:;";
+                let span=document.createElement("span");
+                span.classList.add("arrow");
+                let j = i + 1;
+                span.innerHTML="图片"+j;
+                li.onclick=function (ev) {
+                    picture_ajax(worker, mission_name, i);
+                    index=i;
+                    $.ajax({
+                        type:'POST',
+                        url:'/'+worker+'/loadTagCanvas/'+mission_name+'/'+index,
+                        dataType:'text',
+                        success:function (data) {
+                            var pl=document.getElementById("tagcon");
+                            while(pl.firstChild) {
+                                pl.removeChild(pl.firstChild);
+                            }
+                            var mess=data.split('_');
+                            for(var j=0;j<mess.length;j++){
+                                var tag=mess[j];
+                                var div=document.createElement("div");
+                                div.classList.add("tag");
+                                var em=document.createElement("em");
+                                em.innerHTML=mess[j];
+                                em.classList.add("tagtxt");
+                                div.appendChild(em);
+                                pl.appendChild(div);
+                            }
+                        },
+                        error:function (data) {
+                            alert(data);
+                            alert("error");
+                        }
+                    });
+                };
+                /*
+                    <ul>
+                        <li><a href="javascript:;"><span>通过</span></a></li>
+                        <li><a href="javascript:;"><span>不通过</span></a></li>
+                    </ul>
+                 */
+                a.appendChild(span);
+                li.appendChild(a);
+                picture_list.appendChild(li);
+            }
+        },
+        error:function (data) {
+            alert("图片列表加载失败");
+        }
+    });
+    $.ajax({
+        type:'GET',
+        url:'/'+worker+'/worker/loadAccepted',
+        dataType:'text',
+        success:function (data) {
+            var mess=new Array();
+            mess=data.split('_');
+            for(let i=0;i<mess.length;i++){
+                var obj=eval('('+mess[i]+')');
+                if(obj.missionName==mission_name) {
+                    var needs=obj.description;
+                    var p=document.getElementById("requirements");
+                    p.innerHTML="任务要求:"+needs;
+                }
+            }
+        },
+        error:function (data) {
+
+        }
+    });
+</script>
 </body>
 </html>
