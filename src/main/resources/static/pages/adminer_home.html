@@ -16,6 +16,11 @@
     <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700,800" rel="stylesheet">
 
     <script src="../js/vendor/modernizr-2.8.3-respond-1.4.2.min.js"></script>
+    <style>
+        #jump {
+            border: none;
+        }
+    </style>
 </head>
 
 <body>
@@ -64,8 +69,7 @@
         <div class="content second-content">
             <div class="container-fluid">
                 <p style="color: #fff;font-size: 20px;text-align: center;padding: 100px 0 10px 0;">各用户所占比例</p>
-                <a href="#3"><div id="ring" style="width:450px;height:164px;margin: 0 auto;"></div></a>
-
+                <div class="main-btn"><a href="#3" id="jump"><div id="ring" style="width:450px;height:164px;margin: 0 auto;"></div></a></div>
                 <p style="color: #fff;font-size: 20px;text-align: center;padding: 100px 0 10px 0;">前7日发布任务个数</p>
                 <div id="line" style="width:822px;height:492px;"></div>
                 <p style="color: #fff;font-size: 20px;text-align: center;padding: 100px 0 10px 0;">前7日用户登录次数</p>
@@ -109,6 +113,7 @@
 <script src="../js/main.js"></script>
 
 <script type="text/javascript">
+
     $(document).ready(function() {
 
 
@@ -208,7 +213,7 @@
 
         },
         error:function (data) {
-            alert("获取每日发布任务信息失败");
+            alert("获取每日完成任务信息失败");
         }
     });
 </script>
@@ -216,7 +221,7 @@
     var array_released = new Array();
     $.ajax({
         type:'GET',
-        url:'/admin/acceptedInfo',
+        url:'/admin/releasedInfo',
         dataType:"text",
         success:function (data) {
             let obj=eval('('+data+')');
@@ -239,7 +244,7 @@
 
         },
         error:function (data) {
-            alert("获取每日完成任务信息失败");
+            alert("获取每日发布任务信息失败");
         }
     });
 </script>
