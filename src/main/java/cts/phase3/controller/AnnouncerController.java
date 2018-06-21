@@ -196,28 +196,34 @@ public class AnnouncerController {
         }
         String ret = "";
         for(int i = 0; i < accepts.size(); i++){
+
             Accept accept = accepts.get(i);
             Mission mission = acceptMissions.get(i);
 
-            List<WorkerPicture> workerPictures = workerPictureService.selectWorkerPictureByAccept(accept);
-            String evaluateMissionName = accept.getWorkerName() + "_" + mission.getName();
-            Evaluate evaluate = evaluateService.getEvaluateByMission(evaluateMissionName);
-            List<EvaluatePicture> evaluatePictures = evaluatePictureService.selectEvaluatePictureByRaterAndMission(evaluate.getRaterName(), evaluate.getMissionName());
-            int count = 0;
-            for(int j = 0; j < evaluatePictures.size(); j++){
-                EvaluatePicture evaluatePicture = evaluatePictures.get(j);
-                if(evaluatePicture.getIsRight() == 1)
-                    count++;
-            }
+                List<WorkerPicture> workerPictures = workerPictureService.selectWorkerPictureByAccept(accept);
+                String evaluateMissionName = accept.getWorkerName() + "_" + mission.getName();
+                System.out.println(accept.getWorkerName());
+                System.out.println(accept.getMissionName());
+                Evaluate evaluate = evaluateService.getEvaluateByMission(evaluateMissionName);
+                int count = 0;
+                if (evaluate != null){
+                    List<EvaluatePicture> evaluatePictures = evaluatePictureService.selectEvaluatePictureByRaterAndMission(evaluate.getRaterName(), accept.getMissionName());
+                    for (int j = 0; j < evaluatePictures.size(); j++) {
+                        EvaluatePicture evaluatePicture = evaluatePictures.get(j);
+                        if (evaluatePicture.getIsRight() == 1)
+                            count++;
+                    }
+                }
 
-            ret += "{\"missionName\":\"" + mission.getName() + "\", \"workerName\":\"" + accept.getWorkerName()
-                    + "\", \"points\":\"" + mission.getPoints() + "\", \"start\":\"" + accept.getStart() + "\", \"end\":\""
-                    + accept.getEnd() + "\", \"way\":\"" + mission.getWay() + "\", \"type\":\"" + mission.getType()
-                    + "\", \"description\":\"" + mission.getDescription() + "\", \"difficulty\":\"" + mission.getDifficultyClass()
-                    + "\", \"isFinished\":\"" + accept.getIsFinished() + "\", \"numOfRight\":\"" + count + "\", \"numOfPictures\":\""
-                    + evaluatePictures.size() + "\"}";
-            if(i != accepts.size() - 1)
-                ret += "_";
+                ret += "{\"missionName\":\"" + mission.getName() + "\", \"workerName\":\"" + accept.getWorkerName()
+                        + "\", \"points\":\"" + mission.getPoints() + "\", \"start\":\"" + accept.getStart() + "\", \"end\":\""
+                        + accept.getEnd() + "\", \"way\":\"" + mission.getWay() + "\", \"type\":\"" + mission.getType()
+                        + "\", \"description\":\"" + mission.getDescription() + "\", \"difficulty\":\"" + mission.getDifficultyClass()
+                        + "\", \"isFinished\":\"" + accept.getIsFinished() + "\", \"numOfRight\":\"" + count + "\", \"numOfPictures\":\""
+                        + workerPictures.size() + "\"}";
+                if (i != accepts.size() - 1)
+                    ret += "_";
+
         }
         return ret;
     }
@@ -266,6 +272,22 @@ public class AnnouncerController {
         Base64.Encoder encoder = Base64.getEncoder();
         String str = encoder.encodeToString(bytes);
         return str;
+    }
+
+    @RequestMapping(value = "/{workername}/loadDrawXY/{missionName}/{order}", method = GET)
+    @ResponseBody
+    public String loadXY(@PathVariable("username") String username, @PathVariable("username") String workerName,
+                         @PathVariable("missionName") String missionName, @PathVariable("order") String order){
+        Mission mission = missionService.getMissionByName(missionName);
+        List<MissionPicture> missionPictures = missionPictureService.selectMissionPicturesByMission(missionName);
+        int o = Integer.parseInt(order);
+        MissionPicture missionPicture = missionPictures.get(o);
+        String xy = missionPicture.getName();
+        if(xy.contains(",")){
+            return xy;
+        }
+        else
+            return "kong";
     }
 
 

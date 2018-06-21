@@ -236,21 +236,20 @@
                 alert("坐标为空！");
             else {
                 alert("坐标" + xystr + "已添加");
-                finalxy += xystr;
+                finalxy = xystr;
             }
         });
 
         $("#subxy").click(function () {
             var username = getUsername();
             var missionName = getMissionName();
-            alert(finalxy);
             var count = 0;
             while (finalxy.indexOf(';') > 0){
                 finalxy=finalxy.replace(';', '_');
                 count = count + 1;
             }
-            if(count != 2){
-                alert("矩形数量只能有两个！");
+            if(count != 1){
+                alert("矩形数量只能有1个！");
                 while (finalxy.indexOf('_') > 0){
                     finalxy=finalxy.replace('_', ';');
                     count++;
@@ -258,7 +257,6 @@
             }
             else {
                 finalxy = finalxy.substr(0, finalxy.length - 1);
-                alert(index);
                 $.ajax({
                     url: '/' + username + '/saveDrawXY/' + missionName + '/' + index + '/' + finalxy,
                     dataType: "text",
@@ -281,7 +279,6 @@
         $("#loadxy").click(function (data) {
             var username = getUsername();
             var missionName = getMissionName();
-            alert("w:" + canvas.width + " h:" + canvas.height);
             $.ajax({
                 url:'/' + username + '/loadDrawXY/' + missionName + '/' + index,
                 dataType:"text",
@@ -289,24 +286,13 @@
                 success:function (data) {
                     finalxy=data;
                     var rect1 = finalxy.split('_')[0];
-                    var rect2 = finalxy.split("_")[1];
-                    alert(rect1);
-                    alert(rect2);
                     var xy1 = rect1.split(",");
                     var x1l = xy1[0].split(":")[1];
                     var y1l = xy1[1].split(":")[1];
                     var x1r = xy1[2].split(":")[1];
                     var y1r = xy1[3].split(":")[1];
                     loadRect(x1l, y1l, x1r, y1r);
-
-                    var xy2 = rect2.split(",");
-                    var x2l = xy2[0].split(":")[1];
-                    var y2l = xy2[1].split(":")[1];
-                    var x2r = xy2[2].split(":")[1];
-                    var y2r = xy2[3].split(":")[1];
-                    loadRect(x2l, y2l, x2r, y2r);
-
-                    alert(finalxy);
+                    alert("已获取");
                 },
                 error:function (data) {
                     alert("获取坐标失败！");
@@ -338,7 +324,6 @@
                         $(this).addClass("active")
                     }
                 }
-
             });
         });
     </script>
@@ -407,6 +392,9 @@
                 }
                 if(data==2){
                     data="未审批";
+                }
+                if(data==3){
+                    data="未提交";
                 }
                 document.getElementById("result").innerHTML=data;
             },

@@ -46,6 +46,9 @@
                 </ul>
             </li>
             <li>
+                <a class="afinve" onclick="loadxy()"><em class="icon_1"></em><span>获取坐标</span></a>
+            </li>
+            <li>
                 <a class="afinve" onclick="back_home()"><em class="icon_1"></em><span>返回</span></a>
             </li>
         </ul>
@@ -84,6 +87,15 @@
 
         });
     });
+    function loadRect(xl, yl, xr, yr) {
+        //ctx.clearRect(0, 0, canvas.width, canvas.height);
+        var canvas=document.getElementById("canvas");
+        var ctx = canvas.getContext('2d'); // 得到画布的上下文对象
+        ctx.beginPath();
+        ctx.strokeRect(xl, yl, xr, yr);
+        //xystr="x:"+ x + ",y:" + y + ",xx:" + xr + ",yy:" + yr + ";";
+        loadImage();
+    }
     function getUsername() {
         var url=window.location.href;
         var index = url.indexOf("_");
@@ -141,6 +153,35 @@
         var ctx=canvas.getContext('2d');
         ctx.drawImage(img,0,0);
     }
+    function loadxy(data) {
+        var workername = getWorkerName();
+        var announcername = getUsername();
+        var missionName = getMissionName();
+        $.ajax({
+            url:'/' + announcername + '/' + workername + '/loadDrawXY/' + missionName + '/' + index,
+            dataType:"text",
+            type:'GET',
+            success:function (data) {
+                if(data == "kong"){
+                    alert("用户没有提交坐标");
+                }
+                else {
+                    finalxy = data;
+                    var rect1 = finalxy.split('_')[0];
+                    var xy1 = rect1.split(",");
+                    var x1l = xy1[0].split(":")[1];
+                    var y1l = xy1[1].split(":")[1];
+                    var x1r = xy1[2].split(":")[1];
+                    var y1r = xy1[3].split(":")[1];
+                    loadRect(x1l, y1l, x1r, y1r);
+                    alert("已获取");
+                }
+            },
+            error:function (data) {
+                alert("用户没有提交坐标！");
+            }
+        });
+    }
 </script>
 <script>
     function picture_ajax(user, mission, i) {
@@ -159,6 +200,9 @@
                 }
                 if(data==2){
                     data="未审批";
+                }
+                if(data==3){
+                    data="未完成";
                 }
                 document.getElementById("result").innerHTML=data;
             },
