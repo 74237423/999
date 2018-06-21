@@ -61,6 +61,7 @@
             <th>任务要求</th>
             <th>难度</th>
             <th>任务状态</th>
+            <th>准确率</th>
             <th>选项</th>
         </tr>
         <tbody id="tbMain"></tbody>
@@ -137,6 +138,9 @@
             Cell10.innerHTML = "已完成"; //填充数据
         }
         row.appendChild(Cell10);
+        let acc=document.createElement('td');
+        acc.innerHTML=h.numOfRight+'/'+h.numOfPictures;
+        row.appendChild(acc);
         let Cell11 = document.createElement('td');
         Cell11.innerHTML = "查看具体任务完成情况"; //填充数据
         row.appendChild(Cell11);

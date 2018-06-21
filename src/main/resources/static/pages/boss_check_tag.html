@@ -188,6 +188,26 @@
     function picture_ajax(user, mission, i) {
         $.ajax({
             type:'POST',
+            url:'/' + user + '/loadResult/' + mission + '/' + i,
+            dataType:'text',
+            success:function (data) {
+                if(data==0){
+                    data="不通过";
+                }
+                if(data==1){
+                    data="通过";
+                }
+                if(data==2){
+                    data="未审批";
+                }
+                document.getElementById("result").innerHTML=data;
+            },
+            error:function (data) {
+                alert("图片加载失败");
+            }
+        });
+        $.ajax({
+            type:'POST',
             url:'/' + user + '/loadTagBackground/' + mission + '/' + i,
             dataType:'text',
             success:function (data) {

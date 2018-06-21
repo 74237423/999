@@ -55,7 +55,7 @@
 
 <div class="picture" style="height:530px;width:1090px;position: absolute;top: 0;left:230px;background: no-repeat center" id="canvas_background">
     <p id="requirements">加载任务</p>
-    <h4>审批结果</h4>
+    <h4 id="result">审批结果</h4>
     <canvas id="canvas" width="1090px" height="530px" style="border: #2c3947 solid 2px"></canvas>
 </div>
 <script src="http://www.jq22.com/jquery/jquery-1.10.2.js"></script>
@@ -146,6 +146,26 @@
     function picture_ajax(user, mission, i) {
         var canvas=document.getElementById("canvas");
         var ctx=canvas.getContext('2d');
+        $.ajax({
+            type:'POST',
+            url:'/' + user + '/loadResult/' + mission + '/' + i,
+            dataType:'text',
+            success:function (data) {
+                if(data==0){
+                    data="不通过";
+                }
+                if(data==1){
+                    data="通过";
+                }
+                if(data==2){
+                    data="未审批";
+                }
+                document.getElementById("result").innerHTML=data;
+            },
+            error:function (data) {
+                alert("结果加载失败");
+            }
+        });
         $.ajax({
             type:'POST',
             url:'/' + user + '/loadDrawBackground/' + mission + '/' + i,
