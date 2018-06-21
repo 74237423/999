@@ -57,7 +57,8 @@
 
 
 <div style="position: absolute;top: 0;left:230px">
-    <p>任务要求</p>
+    <p id="requirements">任务要求</p>
+    <h4 id="result">审批结果</h4>
     <div class="picture" style="height:530px;width:1090px;background:url(../img/first_bg.jpg) no-repeat center" id="picture"></div>
     <div class="tagBox">
         <div class="tagCon clearfix" id="tagcon">
@@ -195,7 +196,26 @@
         return subStr;
     }
     function picture_ajax(user, mission, i) {
-
+        $.ajax({
+            type:'POST',
+            url:'/' + user + '/loadResult/' + mission + '/' + i,
+            dataType:'text',
+            success:function (data) {
+                if(data==0){
+                    data="不通过";
+                }
+                if(data==1){
+                    data="通过";
+                }
+                if(data==2){
+                    data="未审批";
+                }
+                document.getElementById("result").innerHTML=data;
+            },
+            error:function (data) {
+                alert("图片加载失败");
+            }
+        });
         $.ajax({
             type:'POST',
             url:'/' + user + '/loadTagBackground/' + mission + '/' + i,
