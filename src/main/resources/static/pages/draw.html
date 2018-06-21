@@ -48,6 +48,14 @@
             </li>
 
             <li>
+                <a  class="afinve" id="loadxy"><em class="icon_1"></em><span>获取坐标</span></a>
+            </li>
+
+            <li>
+                <a  class="afinve" id="addxy"><em class="icon_1"></em><span>添加坐标</span></a>
+            </li>
+
+            <li>
                 <a  class="afinve" id="subxy"><em class="icon_1"></em><span>提交坐标</span></a>
             </li>
 
@@ -170,9 +178,16 @@
                 ctx.clearRect(0, 0, canvas.width, canvas.height);
                 ctx.beginPath();
                 ctx.strokeRect(x, y, e.offsetX - x, e.offsetY - y);
-                loadImage();
                 xystr="x:"+ x + ",y:" + y + ",xx:" + e.offsetX + ",yy:" + e.offsetY + ";";
+                loadImage();
             }
+        }
+        function loadRect(xl, yl, xr, yr) {
+            //ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.beginPath();
+            ctx.strokeRect(xl, yl, xr, yr);
+            //xystr="x:"+ x + ",y:" + y + ",xx:" + xr + ",yy:" + yr + ";";
+            loadImage();
         }
         function loadImage() {
             var img = new Image();
@@ -209,23 +224,85 @@
             }
         }
         function clear(){
+            finalxy = '';
+            xystr = '';
             ctx.clearRect(0,0,canvas.width,canvas.height);
             url=$('canvas')[0].toDataURL();
         }
 
+        $("#addxy").click(function () {
+            alert("坐标" + xystr + "已添加");
+            finalxy += xystr;
+        });
+
         $("#subxy").click(function () {
             var username = getUsername();
             var missionName = getMissionName();
-            finalxy += xystr;
+            alert(finalxy);
+            var count = 0;
+            while (finalxy.indexOf(';') > 0){
+                finalxy=finalxy.replace(';', '_');
+                count = count + 1;
+            }
+            if(count != 2){
+                alert("矩形数量只能有两个！");
+                while (finalxy.indexOf('_') > 0){
+                    finalxy=finalxy.replace('_', ';');
+                    count++;
+                }
+            }
+            else {
+                finalxy = finalxy.substr(0, finalxy.length - 1);
+                $.ajax({
+                    url: '/' + username + '/saveDrawXY/' + missionName + '/' + index + '/' + finalxy,
+                    dataType: "text",
+                    type: 'POST',
+                    success: function (data) {
+                        alert("成功！");
+                        finalxy = finalxy + '_';
+                        while (finalxy.indexOf('_') > 0){
+                            finalxy=finalxy.replace('_', ';');
+                            count++;
+                        }
+                    },
+                    error: function (data) {
+                        alert("失败");
+                    }
+                });
+            }
+        });
+
+        $("#loadxy").click(function (data) {
+            var username = getUsername();
+            var missionName = getMissionName();
             $.ajax({
-                url:'/' + username + '/saveDrawXY/' + missionName + '/' + index + '/' + finalxy,
+                url:'/' + username + '/loadDrawXY/' + missionName + '/0',
                 dataType:"text",
-                type:'POST',
+                type:'GET',
                 success:function (data) {
-                    alert("成功！");
+                    finalxy=data;
+                    var rect1 = finalxy.split('_')[0];
+                    var rect2 = finalxy.split("_")[1];
+                    alert(rect1);
+                    alert(rect2);
+                    var xy1 = rect1.split(",");
+                    var x1l = xy1[0].split(":")[1];
+                    var y1l = xy1[1].split(":")[1];
+                    var x1r = xy1[2].split(":")[1];
+                    var y1r = xy1[3].split(":")[1];
+                    loadRect(x1l, y1l, x1r, y1r);
+
+                    var xy2 = rect2.split(",");
+                    var x2l = xy2[0].split(":")[1];
+                    var y2l = xy2[1].split(":")[1];
+                    var x2r = xy2[2].split(":")[1];
+                    var y2r = xy2[3].split(":")[1];
+                    loadRect(x2l, y2l, x2r, y2r);
+
+                    alert(finalxy);
                 },
                 error:function (data) {
-                    alert("失败");
+                    alert("获取坐标失败！");
                 }
             });
         });

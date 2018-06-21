@@ -131,6 +131,6 @@ public class AcceptServiceImpl implements AcceptService {
 
     @Override
     public List<Accept> getAcceptByMissionName(String missionName) {
-        return null;
+        return this.acceptDao.findByMissionName(missionName);
     }
 }

@@ -1,5 +1,6 @@
 package cts.phase3.controller;
 
+import cts.phase3.controller.utils.ClusteringUtil;
 import cts.phase3.controller.utils.MissionUtil;
 import cts.phase3.controller.utils.WeeklyUtil;
 import cts.phase3.persistence.model.*;
@@ -14,6 +15,7 @@ import cts.phase3.controller.utils.UploadUtil;
 
 
 import javax.annotation.Resource;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Base64;
 import java.util.List;
@@ -410,9 +412,58 @@ public class WorkerController {
     @RequestMapping(value = "/saveDrawXY/{missionName}/{order}/{xy}", method = POST)
     @ResponseBody
     public boolean xy(@PathVariable("username") String username, @PathVariable("missionName") String missionName,
-                     @PathVariable("order") String order, @PathVariable("xy") String xy){
+                      @PathVariable("order") String order, @PathVariable("xy") String xy){
         System.out.println(xy);
         return true;
+    }
+
+    @RequestMapping(value = "/loadDrawXY/{missionName}/{order}", method = GET)
+    @ResponseBody
+    public String loadxy(@PathVariable("username") String username, @PathVariable("missionName") String missionName,
+                      @PathVariable("order") String order){
+        ClusteringUtil clusteringUtil = new ClusteringUtil();
+        ArrayList<double[]> list = new ArrayList<>();
+        double[] one = {4, 4};
+        double[] two = {64, 64};
+        double[] three = {108, 467};
+        double[] four = {789, 900};
+        list.add(one);
+        list.add(two);
+        list.add(three);
+        list.add(four);
+
+        one[0] = 3;
+        one[1] = 4;
+        two[0] = 60;
+        two[1] = 64;
+        three[0] = 98;
+        three[1] = 467;
+        four[0] = 803;
+        four[1] = 900;
+        list.add(one);
+        list.add(two);
+        list.add(three);
+        list.add(four);
+
+        one[0] = 3;
+        one[1] = 8;
+        two[0] = 60;
+        two[1] = 74;
+        three[0] = 98;
+        three[1] = 487;
+        four[0] = 803;
+        four[1] = 910;
+        list.add(one);
+        list.add(two);
+        list.add(three);
+        list.add(four);
+
+        clusteringUtil.setDataSet(list);
+        clusteringUtil.run();
+        List<double[]> xys = clusteringUtil.center();
+        String s = "x:" + xys.get(0)[0] + ",y:" + xys.get(0)[1] + ",xx: " + xys.get(1)[0] + ",yy:" + xys.get(1)[1]
+                + "_x:"+ xys.get(2)[0] + ",y:" + xys.get(2)[1] + ",xx:" + xys.get(3)[0] + ",yy:" + xys.get(3)[1];
+        return s;
     }
 
 
