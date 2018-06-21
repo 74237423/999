@@ -61,6 +61,12 @@ public class AnnouncerController {
     @Resource
     private AcceptService acceptService;
 
+    @Resource
+    private EvaluateService evaluateService;
+
+    @Resource
+    private EvaluatePictureService evaluatePictureService;
+
     @RequestMapping(value = "/release", method = POST)
     @ResponseBody
     public String release(@PathVariable("username") String username,
@@ -192,11 +198,23 @@ public class AnnouncerController {
         for(int i = 0; i < accepts.size(); i++){
             Accept accept = accepts.get(i);
             Mission mission = acceptMissions.get(i);
+
+            List<WorkerPicture> workerPictures = workerPictureService.selectWorkerPictureByAccept(accept);
+            String evaluateMissionName = username + "_" + mission.getName();
+            Evaluate evaluate = evaluateService.getEvaluateByMission(evaluateMissionName);
+            List<EvaluatePicture> evaluatePictures = evaluatePictureService.selectEvaluatePictureByRaterAndMission(evaluate.getRaterName(), evaluate.getMissionName());
+            int count = 0;
+            for(int j = 0; j < evaluatePictures.size(); j++){
+                EvaluatePicture evaluatePicture = evaluatePictures.get(j);
+                if(evaluatePicture.getIsRight() == 1)
+                    count++;
+            }
             ret += "{\"missionName\":\"" + mission.getName() + "\", \"workerName\":\"" + accept.getWorkerName()
                     + "\", \"points\":\"" + mission.getPoints() + "\", \"start\":\"" + accept.getStart() + "\", \"end\":\""
                     + accept.getEnd() + "\", \"way\":\"" + mission.getWay() + "\", \"type\":\"" + mission.getType()
                     + "\", \"description\":\"" + mission.getDescription() + "\", \"difficulty\":\"" + mission.getDifficultyClass()
-                    + "\", \"isFinished\":\"" + accept.getIsFinished() + "\"}";
+                    + "\", \"isFinished\":\"" + accept.getIsFinished() + "\", \"numOfRight\":\"" + count + "\", \"numOfPictures\":\""
+                    + evaluatePictures.size() + "\"}";
             if(i != accepts.size() - 1)
                 ret += "_";
         }
