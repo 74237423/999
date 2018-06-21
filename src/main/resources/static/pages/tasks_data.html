@@ -59,6 +59,7 @@
             <th>任务要求</th>
             <th>难度</th>
             <th>任务状态</th>
+            <th>选项</th>
         </tr>
         <tbody id="tbMain"></tbody>
     </table>
@@ -123,30 +124,33 @@
         Cell9.innerHTML = h.difficulty; //填充数据
         row.appendChild(Cell9);
         let Cell10 = document.createElement('td');
-        Cell10.innerHTML = h.isFinished; //填充数据
+        if(h.isFinished==0){
+            Cell10.innerHTML = "未完成"; //填充数据
+        }
+        else{
+            Cell10.innerHTML = "已完成"; //填充数据
+        }
         row.appendChild(Cell10);
         let Cell11 = document.createElement('td');
-        Cell11.innerHTML = "<a>查看具体任务完成情况</a>"; //填充数据
+        Cell11.innerHTML = "查看具体任务完成情况"; //填充数据
+        row.appendChild(Cell11);
         Cell11.onclick=function (ev) {
-            if(h.way=="框选题"){
-                location.href="boss_check_draw";
+            if(h.way=="标注题"){
+                location.href="/boss_"+username+"_boss_check_tag_"+h.workerName+'_'+getMissionName();
             }
             else{
-                location.href="boss_check_tag";
+                location.href="/boss_"+username+"_boss_check_draw_"+h.workerName+'_'+getMissionName();
             }
         }
-        row.appendChild(Cell6);
         return row;
     }
     var username=getUserName();
-    alert(getMissionName());
     window.onload = function(){
         $.ajax({
             type:'GET',
             url:'/'+username + '/viewAllAccepts',
             dataType:"text",
             success:function (data) {
-                alert(data);
                 var mess=new Array();
                 mess=data.split("_");
                 for(var i=0;i<mess.length;i++){

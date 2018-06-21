@@ -192,7 +192,7 @@ public class AnnouncerController {
         for(int i = 0; i < accepts.size(); i++){
             Accept accept = accepts.get(i);
             Mission mission = acceptMissions.get(i);
-            ret += "{\"announcerName\":\"" + announcer.getUsername() + "\", \"workerName\":\"" + accept.getWorkerName()
+            ret += "{\"missionName\":\"" + mission.getName() + "\", \"workerName\":\"" + accept.getWorkerName()
                     + "\", \"points\":\"" + mission.getPoints() + "\", \"start\":\"" + accept.getStart() + "\", \"end\":\""
                     + accept.getEnd() + "\", \"way\":\"" + mission.getWay() + "\", \"type\":\"" + mission.getType()
                     + "\", \"description\":\"" + mission.getDescription() + "\", \"difficulty\":\"" + mission.getDifficultyClass()
