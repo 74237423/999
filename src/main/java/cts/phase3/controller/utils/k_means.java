@@ -21,7 +21,10 @@ public class k_means {
      */
     public void setDataSet(ArrayList<double[]> dataSet) {
         this.dataSet = dataSet;
-        System.out.println(this.dataSet);
+    }
+
+    public ArrayList<double[]> getDataSet() {
+        return dataSet;
     }
 
     public ArrayList<ArrayList<double[]>> getCluster() {
@@ -29,7 +32,6 @@ public class k_means {
     }
 
     public ArrayList<double[]> getCenter() {
-        System.out.println(this.center);
         return this.center;
     }
 

@@ -46,7 +46,7 @@
                 </ul>
             </li>
             <li>
-                <a href="" class="afinve" onclick="back()"><em class="icon_1"></em><span>返回</span></a>
+                <a class="afinve" onclick="back_home()"><em class="icon_1"></em><span>返回</span></a>
             </li>
         </ul>
     </div>
@@ -125,7 +125,7 @@
         subStr=subStr.substr(0,index);
         return subStr;
     }
-    function back() {
+    function back_home() {
         location.href='/boss_'+getUsername();
     }
     function loadPicture(str){

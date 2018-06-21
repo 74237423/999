@@ -15,4 +15,6 @@ public interface MissionPictureService {
 
     public boolean insertArray(ArrayList<MissionPicture> pictures);
 
+    public boolean updateMissionPicture(MissionPicture missionPicture);
+
 }

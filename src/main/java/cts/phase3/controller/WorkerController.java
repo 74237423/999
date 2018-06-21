@@ -15,6 +15,7 @@ import cts.phase3.controller.utils.UploadUtil;
 
 
 import javax.annotation.Resource;
+import javax.persistence.criteria.CriteriaBuilder;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Base64;
@@ -413,6 +414,11 @@ public class WorkerController {
     @ResponseBody
     public boolean xy(@PathVariable("username") String username, @PathVariable("missionName") String missionName,
                       @PathVariable("order") String order, @PathVariable("xy") String xy){
+        Accept accept = acceptService.getAcceptByMissionNameAndWorkerName(missionName, username);
+        int o = Integer.parseInt(order);
+        WorkerPicture workerPicture = workerPictureService.selectWorkerPictureByAccept(accept).get(o);
+        workerPicture.setName(xy);
+        workerPictureService.updateWorkerPictureByName(workerPicture);
         System.out.println(xy);
         return true;
     }
@@ -421,9 +427,47 @@ public class WorkerController {
     @ResponseBody
     public String loadxy(@PathVariable("username") String username, @PathVariable("missionName") String missionName,
                       @PathVariable("order") String order){
-        ClusteringUtil clusteringUtil = new ClusteringUtil();
+        Mission mission = missionService.getMissionByName(missionName);
+        int o = Integer.parseInt(order);
+        MissionPicture missionPicture = missionPictureService.selectMissionPicturesByMission(mission.getName()).get(o);
+
+        List<Accept> accepts = acceptService.getAcceptByMissionName(mission.getName());
+        List<WorkerPicture> workerPictures = new ArrayList<>();
+        for (int i = 0; i < accepts.size(); i++){
+            Accept accept = accepts.get(i);
+            WorkerPicture workerPicture = workerPictureService.selectWorkerPictureByAccept(accept).get(o);
+            workerPictures.add(workerPicture);
+        }
+
         ArrayList<double[]> list = new ArrayList<>();
-        double[] one = {4, 4};
+
+        for(int i = 0; i < workerPictures.size(); i++){
+            System.out.println("i: " + i);
+            WorkerPicture workerPicture = workerPictures.get(i);
+            String xyStr = workerPicture.getName();
+            System.out.println(xyStr);
+            if(xyStr.split(",").length == 7){
+                String[] rects = xyStr.split("_");
+                for(int j = 0; j < rects.length; j++){
+                    String xlStr = rects[j].split(",")[0].split(":")[1];
+                    String ylStr = rects[j].split(",")[1].split(":")[1];
+                    String xrStr = rects[j].split(",")[2].split(":")[1];
+                    String yrStr = rects[j].split(",")[3].split(":")[1];
+                    int xl = Integer.parseInt(xlStr);
+                    int yl = Integer.parseInt(ylStr);
+                    int xr = Integer.parseInt(xrStr);
+                    int yr = Integer.parseInt(yrStr);
+                    double[] one = {xl, yl};
+                    double[] two = {xr, yr};
+                    list.add(one);
+                    list.add(two);
+                    System.out.println(xlStr + " " + ylStr);
+                }
+            }
+        }
+
+        ClusteringUtil clusteringUtil = new ClusteringUtil();
+        /*double[] one = {4, 4};
         double[] two = {64, 64};
         double[] three = {108, 467};
         double[] four = {789, 900};
@@ -456,13 +500,17 @@ public class WorkerController {
         list.add(one);
         list.add(two);
         list.add(three);
-        list.add(four);
+        list.add(four);*/
 
         clusteringUtil.setDataSet(list);
-        clusteringUtil.run();
         List<double[]> xys = clusteringUtil.center();
-        String s = "x:" + xys.get(0)[0] + ",y:" + xys.get(0)[1] + ",xx: " + xys.get(1)[0] + ",yy:" + xys.get(1)[1]
-                + "_x:"+ xys.get(2)[0] + ",y:" + xys.get(2)[1] + ",xx:" + xys.get(3)[0] + ",yy:" + xys.get(3)[1];
+        String s = "xl:" + xys.get(0)[0] + ",yl:" + xys.get(0)[1] + ",xr:" + xys.get(1)[0] + ",yr:" + xys.get(1)[1]
+                + "_xl:" + xys.get(2)[0] + ",yl:" + xys.get(2)[1] + ",xr:" + xys.get(3)[0] + ",yr:" + xys.get(3)[1];
+        missionPicture.setName(s);
+        missionPictureService.updateMissionPicture(missionPicture);
+        System.out.println(s);
+        /*return "xl:" + 3 + ",yl:" + 3 + ",xr:" + 8 + ",yr:" + 8
+                + "_xl:" + 90 + ",yl:" + 90 + ",xr:" + 108 + ",yr:" + 108;*/
         return s;
     }
 

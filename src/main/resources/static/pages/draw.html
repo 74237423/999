@@ -178,7 +178,7 @@
                 ctx.clearRect(0, 0, canvas.width, canvas.height);
                 ctx.beginPath();
                 ctx.strokeRect(x, y, e.offsetX - x, e.offsetY - y);
-                xystr="x:"+ x + ",y:" + y + ",xx:" + e.offsetX + ",yy:" + e.offsetY + ";";
+                xystr="xl:"+ x + ",yl:" + y + ",xr:" + e.offsetX + ",yr:" + e.offsetY + ";";
                 loadImage();
             }
         }
@@ -231,8 +231,12 @@
         }
 
         $("#addxy").click(function () {
-            alert("坐标" + xystr + "已添加");
-            finalxy += xystr;
+            if(xystr.length==0)
+                alert("坐标为空！");
+            else {
+                alert("坐标" + xystr + "已添加");
+                finalxy += xystr;
+            }
         });
 
         $("#subxy").click(function () {
@@ -253,6 +257,7 @@
             }
             else {
                 finalxy = finalxy.substr(0, finalxy.length - 1);
+                alert(index);
                 $.ajax({
                     url: '/' + username + '/saveDrawXY/' + missionName + '/' + index + '/' + finalxy,
                     dataType: "text",
@@ -275,8 +280,9 @@
         $("#loadxy").click(function (data) {
             var username = getUsername();
             var missionName = getMissionName();
+            alert("w:" + canvas.width + " h:" + canvas.height);
             $.ajax({
-                url:'/' + username + '/loadDrawXY/' + missionName + '/0',
+                url:'/' + username + '/loadDrawXY/' + missionName + '/' + index,
                 dataType:"text",
                 type:'GET',
                 success:function (data) {

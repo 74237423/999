@@ -62,4 +62,15 @@ public class MissionPictureServiceImpl implements MissionPictureService {
 
         return result;
     }
+
+    @Override
+    public boolean updateMissionPicture(MissionPicture missionPicture) {
+        try {
+            this.missionPictureDao.update(missionPicture);
+            return true;
+        }catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
 }
