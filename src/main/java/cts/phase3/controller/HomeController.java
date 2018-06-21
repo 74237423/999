@@ -93,6 +93,14 @@ public class HomeController {
             else
                 return "pages/first_home.html";
         }
+        else if(str.length==7){
+            if(str[4].equals("tag")){
+                return "pages/boss_check_tag.html";
+            }
+            else{
+                return "pages/boss_check_draw.html";
+            }
+        }
         else
             return "pages/first_home.html";
     }
