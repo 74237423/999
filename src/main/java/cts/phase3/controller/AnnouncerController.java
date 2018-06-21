@@ -200,7 +200,7 @@ public class AnnouncerController {
             Mission mission = acceptMissions.get(i);
 
             List<WorkerPicture> workerPictures = workerPictureService.selectWorkerPictureByAccept(accept);
-            String evaluateMissionName = username + "_" + mission.getName();
+            String evaluateMissionName = accept.getWorkerName() + "_" + mission.getName();
             Evaluate evaluate = evaluateService.getEvaluateByMission(evaluateMissionName);
             List<EvaluatePicture> evaluatePictures = evaluatePictureService.selectEvaluatePictureByRaterAndMission(evaluate.getRaterName(), evaluate.getMissionName());
             int count = 0;
@@ -209,6 +209,7 @@ public class AnnouncerController {
                 if(evaluatePicture.getIsRight() == 1)
                     count++;
             }
+
             ret += "{\"missionName\":\"" + mission.getName() + "\", \"workerName\":\"" + accept.getWorkerName()
                     + "\", \"points\":\"" + mission.getPoints() + "\", \"start\":\"" + accept.getStart() + "\", \"end\":\""
                     + accept.getEnd() + "\", \"way\":\"" + mission.getWay() + "\", \"type\":\"" + mission.getType()
