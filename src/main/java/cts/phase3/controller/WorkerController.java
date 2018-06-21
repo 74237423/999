@@ -55,6 +55,9 @@ public class WorkerController {
     @Resource
     private EvaluatePictureService evaluatePictureService;
 
+    @Resource
+    private EvaluateService evaluateService;
+
     @RequestMapping(value = "/accept/{missionName}", method = POST)
     @ResponseBody
     public String accept(@PathVariable("username") String username, @PathVariable("missionName") String missionName) {
@@ -174,6 +177,20 @@ public class WorkerController {
         System.out.println(str);*/
 
         return str;
+    }
+    @RequestMapping(value = "/loadResult/{missionName}/{order}", method = POST)
+    @ResponseBody
+    public int loadDrawResult(@PathVariable("username") String username, @PathVariable("missionName") String missionName,
+                                        @PathVariable("order") String order){
+        Accept accept = workerService.findByMissionNameAndWorkerName(username, missionName);
+        int o = Integer.parseInt(order);
+        WorkerPicture workerPicture = workerPictureService.selectWorkerPictureByAccept(accept).get(o);
+        String evaluateMissionName = username + "_" + missionName;
+        Evaluate evaluate = evaluateService.getEvaluateByMission(evaluateMissionName);
+        if (evaluate.getState() == 0)
+            return 2;
+        EvaluatePicture evaluatePicture = evaluatePictureService.selectEvaluatePictureByRaterAndMission(evaluate.getRaterName(), evaluate.getMissionName()).get(o);
+        return evaluatePicture.getIsRight();
     }
 
     @RequestMapping(value = "/loadDrawBackground/{missionName}/{order}", method = POST)
